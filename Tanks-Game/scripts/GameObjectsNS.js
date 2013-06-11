@@ -30,15 +30,18 @@ var gameObjectsNS = (function () {
         initialize: function ($super, image, topLeft) {
             $super(image, topLeft);
             this.collisionGroupString = 'BrickWall';
-            this._isDestroyed = false;
+            this.isDestroyed = false;
+        },
+        getDestryedStatus: function () {
+            return this.isDestroyed;
         },
         canCollideWith: function (otherCollisionGroupObjectString) {
-            return otherCollisionGroupObjectString == 'Bullet';
+            return otherCollisionGroupObjectString == 'PlayerBullet';
         },
         respondToCollision: function (otherCollisionGroupObjectString) {
             this.Direction = new GridPosition(0, 0);
-            if (otherCollisionGroupObjectString == 'Bullet') {
-                this._isDestroyed = true;
+            if (otherCollisionGroupObjectString == 'PlayerBullet') {
+                this.isDestroyed = true;
             }
         },
     });
@@ -54,10 +57,13 @@ var gameObjectsNS = (function () {
     var PlayerTank = Class.create(MovingObject, {
         initialize: function ($super, image, topLeft, speed) {
             $super(image, topLeft, speed);
-            this._isAlive = true;
+            this.isAlive = true;
             this.collisionGroupString = 'Player';
             this.shouldShoot = false;
             this.lastMoveDirection = new GridPosition(1, 0); // Used for bullet direction on shoot
+        },
+        getAliveStatus: function () {
+            return this.isAlive;
         },
         canCollideWith: function (otherCollisionGroupObjectString) {
             return otherCollisionGroupObjectString == 'BrickWall'
@@ -67,7 +73,7 @@ var gameObjectsNS = (function () {
         respondToCollision: function (otherCollisionGroupObjectString) {
             this.Direction = new GridPosition(0, 0);
             if (otherCollisionGroupObjectString == 'Player') {
-                this._isAlive = false;
+                this.isAlive = false;
             }
         },
         move: function (direction) {
@@ -82,17 +88,21 @@ var gameObjectsNS = (function () {
     var EnemyTank = Class.create(MovingObject, {
         initialize: function ($super, image, topLeft, speed) {
             $super(image, topLeft, speed);
-            this._isAlive = true;
-            this.collisionGroupString = 'Player';
+            this.isAlive = true;
+            this.collisionGroupString = 'Enemy';
+        },
+        getAliveStatus: function () {
+            return this.isAlive;
         },
         canCollideWith: function (otherCollisionGroupObjectString) {
             return otherCollisionGroupObjectString == 'BrickWall'
-                || otherCollisionGroupObjectString == 'SteelWall';
+                || otherCollisionGroupObjectString == 'SteelWall'
+                || otherCollisionGroupObjectString == 'Enemy';
         },
         respondToCollision: function (otherCollisionGroupObjectString) {
             this.Direction = new GridPosition(0, 0);
-            if (otherCollisionGroupObjectString == 'Bullet') {
-                this._isAlive = false;
+            if (otherCollisionGroupObjectString == 'PlayerBullet') {
+                this.isAlive = false;
             }
         },
         move: function () {
@@ -100,12 +110,40 @@ var gameObjectsNS = (function () {
         }
     });
 
-    var Bullet = Class.create(MovingObject, {
+    var PlayerBullet = Class.create(MovingObject, {
         initialize: function ($super, image, topLeft, speed, playerLastMoveDirection) {
             $super(image, topLeft, speed);
-            this._isDestroyed = false;
-            this.collisionGroupString = 'Bullet';
+            this.isDestroyed = false;
+            this.collisionGroupString = 'PlayerBullet';
             this.Direction = playerLastMoveDirection;
+        },
+        getDestryedStatus: function () {
+            return this.isDestroyed;
+        },
+        canCollideWith: function (otherCollisionGroupObjectString) {
+            return otherCollisionGroupObjectString == 'BrickWall'
+                || otherCollisionGroupObjectString == 'SteelWall'
+                || otherCollisionGroupObjectString == 'Enemy';
+        },
+        respondToCollision: function () {
+            this.Direction = new GridPosition(0, 0);
+            this.isDestryed = true;
+
+        },
+        move: function () {
+            this.topLeft.update(this.Direction);
+        },
+    });
+
+    var EnemyBullet = Class.create(MovingObject, {
+        initialize: function ($super, image, topLeft, speed, enemyLastMoveDirection) {
+            $super(image, topLeft, speed);
+            this.isDestroyed = false;
+            this.collisionGroupString = 'PlayerBullet';
+            this.Direction = playerLastMoveDirection;
+        },
+        getDestryedStatus: function () {
+            return this.isDestroyed;
         },
         canCollideWith: function (otherCollisionGroupObjectString) {
             return otherCollisionGroupObjectString == 'BrickWall'
@@ -114,7 +152,7 @@ var gameObjectsNS = (function () {
         },
         respondToCollision: function () {
             this.Direction = new GridPosition(0, 0);
-            this._isDestryed = true;
+            this.isDestryed = true;
 
         },
         move: function () {
@@ -130,6 +168,7 @@ var gameObjectsNS = (function () {
         SteelWall: SteelWall,
         PlayerTank: PlayerTank,
         EnemyTank: EnemyTank,
-        Bullet: Bullet,
+        PlayerBullet: PlayerBullet,
+        EnemyBullet: EnemyBullet,
     }
 })();
