@@ -29,4 +29,12 @@ test("Test ScoreBoard add method", function () {
     test.add(10);
     deepEqual(test.returnProperty(), { container: 1, width: 1, height: 1, scores: [10] }, "Score added successfully");
 });
+test("Test ScoreBoard _orderScores method", function () {
+
+    var firstPlayerScore = new scoresNS.Score("pesho", 2);
+    var secondPlayerScore = new scoresNS.Score("mimi", 3);
+    var scoreboard = new scoresNS.ScoreBoard(1, 1, 1);
+    var expected = scoreboard._orderScores(firstPlayerScore, secondPlayerScore);
+    deepEqual(expected,-1, "The two scores were successfully sorted");
+});
 

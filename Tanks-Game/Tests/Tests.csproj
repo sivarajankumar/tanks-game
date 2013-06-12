@@ -67,6 +67,8 @@
     <Content Include="scripts\libs\qunit-1.11.0.js" />
     <Content Include="scripts\ScoresNS.js" />
     <Content Include="scripts\tests\GameFieldNSTest.js" />
+    <Content Include="scripts\tests\GameObjectsNSTests.js" />
+    <Content Include="scripts\tests\ScoresNSTest.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
