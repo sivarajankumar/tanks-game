@@ -6,6 +6,13 @@ var gameObjectsNS = (function () {
         },
         render: function () {
             // TODO: Implement logic with[out] jQuery.
+        },
+        //Used for testing
+        returnProperty: function () {
+            return {
+                image: this.image,
+                topLeft: this.topLeft
+            };
         }
     });
 
@@ -22,6 +29,14 @@ var gameObjectsNS = (function () {
         },
         move: function () {
             this.topLeft.update(this.speed);
+        },
+        //used for testing
+        returnProperty: function () {
+            return {
+                image: this.image,
+                topLeft: this.topLeft,
+                speed: this.speed
+            };
         }
     });
 

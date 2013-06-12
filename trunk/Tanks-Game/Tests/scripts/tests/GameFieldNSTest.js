@@ -27,7 +27,8 @@ test("Test FieldPosition Constructor  ", function () {
 test("Test FieldPosition update method  ", function () {
 
     var test = new gameFieldNS.FieldPosition(2, 2);
-    test.update(1);
-    deepEqual(test.returnProperty(), { xCoord: 3, yCoord: 3 }, "Object updated successfully");
+    var delta = new gameFieldNS.FieldPosition(2, 0);
+    test.update(delta);
+    deepEqual(test.returnProperty(), { xCoord: 4, yCoord: 2 }, "Object coordinates updated successfully");
 });
 
