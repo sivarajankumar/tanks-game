@@ -403,7 +403,6 @@ gf.refreshGame = function () {
  * End of Preloading Section
  */
 
-
 /**Keyboard polling End of Preloading Section
  */
 gf.keyboard = [];
