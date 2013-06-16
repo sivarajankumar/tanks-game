@@ -37,7 +37,6 @@ $(function () {
         height: 34,
     }
 
-    //Tiles
     var tiles = [
         new engine.animation({
             url: "images/tiles.png"
@@ -131,7 +130,7 @@ $(function () {
     }
 
     var addTanks = function () {
-        if (tanks.length < 1) {
+        if (tanks.length < 10) {
             var newTank = new gameObjectsNS.EnemyTank("tank" + tanks.length, tankAnimation, 5, standardTankOptions);
             engine.setAnimation(newTank.container, tankAnimation);
             container.append(newTank.container);
