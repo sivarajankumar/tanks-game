@@ -1,8 +1,22 @@
 $(function () {
     var playerPoints = 0;
 
-    var tankAnimation = new engine.animation({
-        url: "images/player-tank.png",
+    var tankAnimSmall = new engine.animation({
+        url: "images/tank1.png",
+        numberOfFrames: 2,
+        rate: 200,
+        width: 34,
+    })
+
+     var tankAnimBig = new engine.animation({
+        url: "images/tank2.png",
+        numberOfFrames: 2,
+        rate: 200,
+        width: 34,
+    })
+
+      var tankAnimBigger = new engine.animation({
+        url: "images/tank3.png",
         numberOfFrames: 2,
         rate: 200,
         width: 34,
@@ -67,21 +81,21 @@ $(function () {
         }),
     ];
 
-    var level = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    			 [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    			 [1, 0, 0, 3, 3, 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    			 [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    			 [1, 0, 0, 0, 2, 0, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 1],
-    			 [1, 0, 0, 0, 2, 0, 0, 0, 0, 4, 4, 4, 0, 4, 0, 0, 0, 0, 0, 1],
-    			 [1, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    			 [1, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    			 [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                 [1, 0, 0, 0, 2, 0, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 1],
-                 [1, 0, 0, 0, 2, 0, 0, 0, 0, 4, 4, 4, 0, 4, 0, 0, 0, 0, 0, 1],
-                 [1, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                 [1, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                 [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                 [5, 5, 5, 5, 5, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 5, 5, 5]];
+    var level = [[6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+                 [6, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6],
+                 [6, 0, 0, 1, 1, 1, 0, 0, 0, 6, 0, 0, 0, 2, 2, 2, 0, 0, 0, 6],
+                 [6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 6],
+                 [6, 0, 2, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 6],
+                 [6, 0, 2, 0, 2, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 6],
+                 [6, 0, 2, 0, 2, 0, 6, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 6],
+                 [6, 0, 2, 0, 2, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 6],
+                 [6, 0, 1, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 6],
+                 [6, 0, 1, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6],
+                 [6, 0, 1, 0, 2, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 6],
+                 [6, 0, 1, 0, 0, 0, 6, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1, 0, 6],
+                 [6, 0, 1, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6],
+                 [6, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6],
+                 [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]];
 
     var container, tilemap;
     var player = new gameObjectsNS.PlayerTank("player-tank", playerAnimation, 50, { x: 600, y: 60 });
@@ -91,7 +105,7 @@ $(function () {
     });
 
     var initialize = function () {
-        $("#myGame").append("<div id='container' style='display: none; width: 640px; height: 480px; background-color: black;'>");
+        $("#myGame").append("<div id='container' style='display: none; width: 680px; height: 480px; background-color: black;'>");
 
         container = $("#container");
         group = engine.addGroup(container, "group");
@@ -128,8 +142,19 @@ $(function () {
 
     var addTanks = function () {
         if (tanks.length < 10) {
-            var newTank = new gameObjectsNS.EnemyTank("tank" + tanks.length, tankAnimation, 5, standardTankOptions);
-            engine.setAnimation(newTank.container, tankAnimation);
+            var newTank = new gameObjectsNS.EnemyTank("tank" + tanks.length, tankAnimSmall, 5, standardTankOptions);
+            var randomNumber = (Math.random() * 3) | 0;
+            switch (randomNumber) {
+                case 0:
+                    engine.setAnimation(newTank.container, tankAnimSmall);
+                    break;
+                case 1:
+                    engine.setAnimation(newTank.container, tankAnimBig);
+                    break;
+                case 2:
+                    engine.setAnimation(newTank.container, tankAnimBigger);
+                    break;
+            }
             container.append(newTank.container);
             tanks.push(newTank);
         }
