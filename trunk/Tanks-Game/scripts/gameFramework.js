@@ -1,17 +1,13 @@
-var gf = {
+var engine = {
     baseRate: 30,
-};
-
-//For easier manipulation of main game Framework parameters
-gf.initialize = function (options) {
-    $.extend(gf, options);
 }
 
-/**
- * This function adds a sprite the div defined by the fir'st argument
- **/
-gf.spriteFragment = $("<div class='gf_sprite' style='position: absolute; overflow: hidden;'></div>");
-gf.addSprite = function (parent, divId, options) {
+engine.initialize = function (options) {
+    $.extend(engine, options);
+}
+
+engine.spriteFragment = $("<div class='engine_sprite' style='position: absolute; overflow: hidden;'></div>");
+engine.addSprite = function (parent, divId, options) {
     var options = $.extend({
         x: 0,
         y: 0,
@@ -22,22 +18,18 @@ gf.addSprite = function (parent, divId, options) {
         rotate: 0,
         scale: 1
     }, options);
-    var sprite = gf.spriteFragment.clone().css({
+    var sprite = engine.spriteFragment.clone().css({
         left: options.x,
         top: options.y,
         width: options.width,
         height: options.height
-    }).attr("id", divId).data("gf", options);
+    }).attr("id", divId).data("engine", options);
     parent.append(sprite);
     return sprite;
 }
 
-
-/**
- * This function adds a sprite the div defined by the fir'st argument
- **/
-gf.groupFragment = $("<div class='gf_group' style='position: absolute; overflow: visible;'></div>");
-gf.addGroup = function (parent, divId, options) {
+engine.groupFragment = $("<div class='engine_group' style='position: absolute; overflow: visible;'></div>");
+engine.addGroup = function (parent, divId, options) {
     var options = $.extend({
         x: 0,
         y: 0,
@@ -46,25 +38,19 @@ gf.addGroup = function (parent, divId, options) {
         rotate: 0,
         scale: 1
     }, options);
-    var group = gf.groupFragment.clone().css({
+    var group = engine.groupFragment.clone().css({
         left: options.x,
         top: options.y
-    }).attr("id", divId).data("gf", options);
+    }).attr("id", divId).data("engine", options);
     parent.append(group);
     return group;
 }
 
-/**
- * This function sets the current frame.
- **/
-gf.setFrame = function (div, animation) {
+engine.setFrame = function (div, animation) {
     div.css("backgroundPosition", "-" + (animation.currentFrame * animation.width + animation.offset) + "px 0px");
 }
 
-/**
- * Animation Object.
- **/
-gf.animation = function (options) {
+engine.animation = function (options) {
     var defaultValues = {
         url: false,
         width: 64,
@@ -73,22 +59,19 @@ gf.animation = function (options) {
         rate: 1,
         offset: 0
     }
+
     $.extend(this, defaultValues, options);
     if (options.rate) {
-        // normalize the animation rate
-        this.rate = Math.round(this.rate / gf.baseRate);
+        this.rate = Math.round(this.rate / engine.baseRate);
     }
+
     if (this.url) {
-        gf.addImage(this.url);
+        engine.addImage(this.url);
     }
 }
 
-gf.animations = [];
-
-/**
- * Sets the animation for the given sprite.
- **/
-gf.setAnimation = function (div, animation, loop) {
+engine.animations = [];
+engine.setAnimation = function (div, animation, loop) {
     var animate = {
         animation: $.extend({}, animation),
         div: div,
@@ -100,46 +83,34 @@ gf.setAnimation = function (div, animation, loop) {
         div.css("backgroundImage", "url('" + animation.url + "')");
     }
 
-    // search if this div already has an animation
     var divFound = false;
-    for (var i = 0; i < gf.animations.length; i++) {
-        if (gf.animations[i].div.is(div)) {
+    for (var i = 0; i < engine.animations.length; i++) {
+        if (engine.animations[i].div.is(div)) {
             divFound = true;
-            gf.animations[i] = animate;
+            engine.animations[i] = animate;
         }
     }
 
-    // otherwise we add it to the array
     if (!divFound) {
-        gf.animations.push(animate);
+        engine.animations.push(animate);
     }
 }
 
-/**
- * Preloading Section
- */
-gf.imagesToPreload = [];
-
-/**
- * Add an image to the list of image to preload
- **/
-gf.addImage = function (url) {
-    if ($.inArray(url, gf.imagesToPreload) < 0) {
-        gf.imagesToPreload.push();
+engine.imagesToPreload = [];
+engine.addImage = function (url) {
+    if ($.inArray(url, engine.imagesToPreload) < 0) {
+        engine.imagesToPreload.push();
     }
-    gf.imagesToPreload.push(url);
-};
+    engine.imagesToPreload.push(url);
+}
 
-
-gf.intersect = function (a1, a2, b1, b2) {
+engine.intersect = function (a1, a2, b1, b2) {
     var i1 = Math.min(Math.max(a1, b1), a2);
     var i2 = Math.max(Math.min(a2, b2), a1);
     return [i1, i2];
 }
-/**
- * This function returns the indexes coresponding to the given box in the tilemap.
- */
-gf.tilemapBox = function (tilemapOptions, boxOptions) {
+
+engine.tilemapBox = function (tilemapOptions, boxOptions) {
     var tmX = tilemapOptions.x;
     var tmXW = tilemapOptions.x + tilemapOptions.width * tilemapOptions.tileWidth;
     var tmY = tilemapOptions.y;
@@ -150,8 +121,8 @@ gf.tilemapBox = function (tilemapOptions, boxOptions) {
     var bY = boxOptions.y;
     var bYH = boxOptions.y + boxOptions.height;
 
-    var x = gf.intersect(tmX, tmXW, bX, bXW);
-    var y = gf.intersect(tmY, tmYH, bY, bYH);
+    var x = engine.intersect(tmX, tmXW, bX, bXW);
+    var y = engine.intersect(tmY, tmYH, bY, bYH);
 
     return {
         x1: Math.floor((x[0] - tilemapOptions.x) / tilemapOptions.tileWidth),
@@ -161,8 +132,8 @@ gf.tilemapBox = function (tilemapOptions, boxOptions) {
     }
 }
 
-gf.tilemapFragment = $("<div class='gf_tilemap' style='position: absolute'></div>");
-gf.addTilemap = function (parent, divId, options) {
+engine.tilemapFragment = $("<div class='engine_tilemap' style='position: absolute'></div>");
+engine.addTilemap = function (parent, divId, options) {
     var options = $.extend({
         x: 0,
         y: 0,
@@ -174,12 +145,10 @@ gf.addTilemap = function (parent, divId, options) {
         animations: []
     }, options);
 
-    //create line and row fragment:
-    var tilemap = gf.tilemapFragment.clone().attr("id", divId).data("gf", options);
+    var tilemap = engine.tilemapFragment.clone().attr("id", divId).data("engine", options);
     for (var i = 0; i < options.height; i++) {
         for (var j = 0; j < options.width; j++) {
             var animationIndex = options.map[i][j];
-
             if (animationIndex > 0) {
                 var tileOptions = {
                     x: options.x + j * options.tileWidth,
@@ -187,15 +156,15 @@ gf.addTilemap = function (parent, divId, options) {
                     width: options.tileWidth,
                     height: options.tileHeight
                 }
-                var tile = gf.spriteFragment.clone().css({
+
+                var tile = engine.spriteFragment.clone().css({
                     left: tileOptions.x,
                     top: tileOptions.y,
                     width: tileOptions.width,
                     height: tileOptions.height
-                }
-                ).addClass("gf_line_" + i).addClass("gf_column_" + j).data("gf", tileOptions);
+                }).addClass("engine_line_" + i).addClass("engine_column_" + j).data("engine", tileOptions);
 
-                gf.setAnimation(tile, options.animations[animationIndex - 1]);
+                engine.setAnimation(tile, options.animations[animationIndex - 1]);
 
                 tilemap.append(tile);
             }
@@ -205,32 +174,34 @@ gf.addTilemap = function (parent, divId, options) {
     return tilemap;
 }
 
-gf.tilemapCollide = function (tilemap, box) {
-    var options = tilemap.data("gf");
-    var collisionBox = gf.tilemapBox(options, box);
+engine.tilemapCollide = function (tilemap, box) {
+    var options = tilemap.data("engine");
+    var collisionBox = engine.tilemapBox(options, box);
     var divs = []
 
     for (var i = collisionBox.y1; i < collisionBox.y2; i++) {
         for (var j = collisionBox.x1; j < collisionBox.x2; j++) {
             var index = options.map[i][j];
             if (index > 0) {
-                divs.push(tilemap.find(".gf_line_" + i + ".gf_column_" + j));
+                divs.push(tilemap.find(".engine_line_" + i + ".engine_column_" + j));
             }
         }
     }
+
     return divs;
 }
 
-gf.objectCollide = function (gameObject1, gameObject2) {
+engine.objectCollide = function (gameObject1, gameObject2) {
     var option1 = gameObject1.options;
     var option2 = gameObject2.options;
 
-    var x = gf.intersect(
+    var x = engine.intersect(
         option1.x,
         option1.x + option1.width,
         option2.x,
         option2.x + option2.width);
-    var y = gf.intersect(
+
+    var y = engine.intersect(
         option1.y,
         option1.y + option1.height,
         option2.y,
@@ -243,13 +214,7 @@ gf.objectCollide = function (gameObject1, gameObject2) {
     }
 }
 
-/**
- * Movements (WE are not using transform, different on different browsers)
- */
-/**
- * This function sets or returns the position along the x-axis.
- **/
-gf.x = function (gameObject, position) {
+engine.x = function (gameObject, position) {
     if (position) {
         gameObject.container.css("left", position);
         gameObject.options.x = position;
@@ -257,10 +222,8 @@ gf.x = function (gameObject, position) {
         return gameObject.options.x;
     }
 }
-/**
- * This function sets or returns the position along the y-axis.
- **/
-gf.y = function (gameObject, position) {
+
+engine.y = function (gameObject, position) {
     if (position) {
         gameObject.container.css("top", position);
 
@@ -269,11 +232,8 @@ gf.y = function (gameObject, position) {
         return gameObject.options.y;
     }
 }
-/**
- * End of Movements
- */
 
-gf.transform = function (gameObject, newOptions) {
+engine.transform = function (gameObject, newOptions) {
     if (newOptions.flipH !== undefined) {
         gameObject.options.flipH = newOptions.flipH;
     }
@@ -293,7 +253,7 @@ gf.transform = function (gameObject, newOptions) {
         + "," + (gameObject.options.scale * factorV) + ")");
 }
 
-gf.width = function (gameObject, dimension) {
+engine.width = function (gameObject, dimension) {
     if (dimension) {
         gameObject.container.css("width", position);
         gameObject.options.width = position;
@@ -302,7 +262,7 @@ gf.width = function (gameObject, dimension) {
     }
 }
 
-gf.height = function (gameObject, dimension) {
+engine.height = function (gameObject, dimension) {
     if (dimension) {
         gameObject.container.css("height", position);
         gameObject.options.height = position;
@@ -311,32 +271,28 @@ gf.height = function (gameObject, dimension) {
     }
 }
 
-/**
- * Start the preloading of the images.
- * After preloading is finished, start the main refresh Method
- **/
-gf.startGame = function (endCallback, progressCallback) {
+engine.startGame = function (endCallback, progressCallback) {
     var images = [];
-    var total = gf.imagesToPreload.length;
-
+    var total = engine.imagesToPreload.length;
     for (var i = 0; i < total; i++) {
         var image = new Image();
         images.push(image);
-        image.src = gf.imagesToPreload[i];
+        image.src = engine.imagesToPreload[i];
     }
+
     var preloadingPoller = setInterval(function () {
         var counter = 0;
-        var total = gf.imagesToPreload.length;
+        var total = engine.imagesToPreload.length;
         for (var i = 0; i < total; i++) {
             if (images[i].complete) {
                 counter++;
             }
         }
+
         if (counter == total) {
-            //we are done!
             clearInterval(preloadingPoller);
             endCallback();
-            setInterval(gf.refreshGame, gf.baseRate);
+            setInterval(engine.refreshGame, engine.baseRate);
         } else {
             if (progressCallback) {
                 count++;
@@ -346,51 +302,42 @@ gf.startGame = function (endCallback, progressCallback) {
     }, 100);
 };
 
-//list of functionis to be called on timer
-gf.callbacks = [];
-
-gf.addCallback = function (callback, rate) {
-    gf.callbacks.push({
+engine.callbacks = [];
+engine.addCallback = function (callback, rate) {
+    engine.callbacks.push({
         callback: callback,
-        rate: Math.round(rate / gf.baseRate),
+        rate: Math.round(rate / engine.baseRate),
         counter: 0
-    });
+    })
 }
 
-gf.removeCallback = function (callback) {
-    gf.callbacks.remove(callback);
+engine.removeCallback = function () {
+    engine.callbacks.remove(callback);
 }
 
-//Internal refresh rate, will invoke all other loop actions
-gf.refreshGame = function () {
-    // update animations
+engine.refreshGame = function () {
     var finishedAnimations = [];
-
-    for (var i = 0; i < gf.animations.length; i++) {
-
-        var animate = gf.animations[i];
-
+    for (var i = 0; i < engine.animations.length; i++) {
+        var animate = engine.animations[i];
         animate.counter++;
         if (animate.counter == animate.animation.rate) {
             animate.counter = 0;
             animate.animation.currentFrame++;
-            //One time animations or repeated animations
             if (!animate.loop && animate.animation.currentFrame > animate.animation.numberOfFrame) {
                 finishedAnimations.push(i);
             } else {
                 animate.animation.currentFrame %= animate.animation.numberOfFrames;
-                gf.setFrame(animate.div, animate.animation);
+                engine.setFrame(animate.div, animate.animation);
             }
         }
     }
+
     for (var i = 0; i < finishedAnimations.length; i++) {
-        gf.animations.splice(finishedAnimations[i], 1);
+        engine.animations.splice(finishedAnimations[i], 1);
     }
 
-    // execute the callbacks
-    for (var i = 0; i < gf.callbacks.length; i++) {
-        var call = gf.callbacks[i];
-
+    for (var i = 0; i < engine.callbacks.length; i++) {
+        var call = engine.callbacks[i];
         call.counter++;
         if (call.counter == call.rate) {
             call.counter = 0;
@@ -399,17 +346,11 @@ gf.refreshGame = function () {
     }
 }
 
-/**
- * End of Preloading Section
- */
-
-/**Keyboard polling End of Preloading Section
- */
-gf.keyboard = [];
-// keyboard state handler
+engine.keyboard = [];
 $(document).keydown(function (event) {
-    gf.keyboard[event.keyCode] = true;
+    engine.keyboard[event.keyCode] = true;
 });
+
 $(document).keyup(function (event) {
-    gf.keyboard[event.keyCode] = false;
-});
+    engine.keyboard[event.keyCode] = false;
+})
