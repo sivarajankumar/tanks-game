@@ -5,10 +5,13 @@
 
     }
 });
-test("Test Score constructor", function () {
+test("When Score is initialized set correct values", function () {
 
     var test = new scoresNS.Score("pesho", 10);
-    deepEqual(test.returnProperty(), { name: "pesho", points: 10}, "Object constructed successfully");
+    var name = "pesho";
+    var points = 10;
+    deepEqual(name, test.name, "Property name set successfully");
+    deepEqual(points, test.points, "Property points set successfully");
 });
 
 module("Test ScoreBoard class ", {
@@ -18,16 +21,23 @@ module("Test ScoreBoard class ", {
 
     }
 });
-test("Test ScoreBoard constructor", function () {
+test("When ScoreBoard is initialized set correct values", function () {
 
-    var test = new scoresNS.ScoreBoard(1,1,1);
-    deepEqual(test.returnProperty(), { container: 1, width: 1,height:1, scores:[] }, "Object constructed successfully");
+    var test = new scoresNS.ScoreBoard(1,2,3);
+    var container = 1;
+    var width = 2;
+    var height = 3;
+    deepEqual(container, test.container, "Container property set successully");
+    deepEqual(width, test.width, "Width property set successully");
+    deepEqual(height, test.height, "Height property set successully");
 });
-test("Test ScoreBoard add method", function () {
+test("When ScoreBoard add method is used property field is updated correctly", function () {
 
-    var test = new scoresNS.ScoreBoard(1, 1, 1);
-    test.add(10);
-    deepEqual(test.returnProperty(), { container: 1, width: 1, height: 1, scores: [10] }, "Score added successfully");
+    var test = new scoresNS.ScoreBoard(1, 2, 3);
+    test.add(0);
+    test.add(42);
+    var newScore = [0,42];
+    deepEqual(newScore,test.scores, "Score updated successfully");
 });
 test("Test ScoreBoard _orderScores method", function () {
 

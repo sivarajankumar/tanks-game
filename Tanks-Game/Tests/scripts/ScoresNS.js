@@ -3,10 +3,6 @@
         initialize: function (name, points) {
             this.name = name;
             this.points = points;
-        },
-        //Used for testing
-        returnProperty: function() {
-            return {name:this.name, points:this.points };
         }
     });
 
@@ -35,10 +31,6 @@
         },
         _orderScores: function (firstScore, secondScore) {
             return firstScore.points - secondScore.points;
-        },
-        //Used for testing
-        returnProperty: function () {
-            return { container: this.container, width: this.width, height: this.height, scores:this.scores };
         }
     });
 
