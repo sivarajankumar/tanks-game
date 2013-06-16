@@ -311,8 +311,14 @@ engine.addCallback = function (callback, rate) {
     })
 }
 
-engine.removeCallback = function () {
-    engine.callbacks.remove(callback);
+
+engine.removeCallback = function (callback) {
+    for (var i = 0; i < engine.callbacks.length; i++) {
+        if (engine.callbacks === callback) {
+            engine.callbacks.splice(i, 1);
+            break;
+        }
+    };
 }
 
 engine.refreshGame = function () {
@@ -349,7 +355,7 @@ engine.refreshGame = function () {
 engine.keyboard = [];
 $(document).keydown(function (event) {
     engine.keyboard[event.keyCode] = true;
-});
+})
 
 $(document).keyup(function (event) {
     engine.keyboard[event.keyCode] = false;
