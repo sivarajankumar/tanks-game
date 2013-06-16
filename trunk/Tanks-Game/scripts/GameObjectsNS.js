@@ -28,6 +28,12 @@ var gameObjectsNS = (function () {
             container.css("overflow", "hidden");
             return container;
         },
+
+        remove: function() {
+            console.log(this.id + " removed.");
+            $("#" + this.id).remove();
+        },
+
         left: function (position) {
             if (position) {
                 this.container.css("left", position);
@@ -114,7 +120,7 @@ var gameObjectsNS = (function () {
             this.isAlive = true;
             this.direction = "down";
         },
-        
+
         changeDirection: function () {
             var randomNumber = (Math.random() * 4) | 0;
             switch (randomNumber) {

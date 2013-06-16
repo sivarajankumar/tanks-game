@@ -201,12 +201,23 @@ $(function() {
     }
 
     var moveBullets = function() {
+        var removedBullets = [];
+        var movements;
+        var isMoved;
         for (var i=0; i < bullets.length; i++) {
-            var movements = tryMoveObject(bullets[i], bullets[i].direction);
-            updateMovingObject(bullets[i], movements.horizontalMove, movements.verticalMove)
+            movements = tryMoveObject(bullets[i], bullets[i].direction, bullets[i].speed);
+            isMoved = updateBullet(bullets[i], movements.horizontalMove, movements.verticalMove);
+            if (!isMoved) {
+                removedBullets.push(bullets[i]);
+            }
             //tanks[i].move();
             //tanks[i].update();
         }
+
+        //removed all successfulBullets
+        for (var i = 0; i < removedBullets.length; i++) {
+            bullets.splice(removedBullets[i]);
+        };
     }
 
 	var tryMoveObject = function (gameObject, direction, inputStep) {
@@ -243,6 +254,26 @@ $(function() {
 			verticalMove: verticalMove
 		};
 	}
+
+    var updateBullet = function(bullet, horizontalMove, verticalMove) {
+        var newY = gf.y(bullet) + verticalMove;
+        var newX = gf.x(bullet) + horizontalMove;
+        var newW = gf.width(bullet);
+        var newH = gf.height(bullet);            
+        
+        var collisions = gf.tilemapCollide(tilemap, {x: newX, y: newY, width: newW, height: newH});
+        var i = 0;
+        if (collisions.length > 0)
+        {
+            bullets.splice(bullet, 1)
+            bullet.remove();
+            return false;
+        }
+        
+        gf.x(bullet, newX);
+        gf.y(bullet, newY);
+        return true;
+    }
 
 	var updateMovingObject = function(gameObject, horizontalMove, verticalMove) {
 		var newY = gf.y(gameObject) + verticalMove;
