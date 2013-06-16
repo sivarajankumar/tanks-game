@@ -92,6 +92,14 @@ $(function () {
                  [1, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                  [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                  [5, 5, 5, 5, 5, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 5, 5, 5]];
+     
+	//Adding start button
+	//$("#myGame").append("<img id='startButton' src='images/start.jpg' style='width: 40px; height: 40px;' />");
+	//start button
+	$("#startButton").click(function() {
+		//Wait for the images to load then init the game elements
+ 		gf.startGame(initialize);
+ 	});
 
     //Adding start button
     $("#myGame").append("<img id='startButton' src='images/start.jpg' style='width: 40px; height: 40px;' />");
