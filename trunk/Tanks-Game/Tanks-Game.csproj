@@ -58,16 +58,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="index.html" />
-    <Content Include="scripts\Animation.js" />
-    <Content Include="scripts\GameFieldNS.js" />
-    <Content Include="scripts\gameFramework.js" />
+    <Content Include="scripts\GameEngine.js" />
     <Content Include="scripts\GameObjectsNS.js" />
     <Content Include="scripts\libs\jquery-1.10.1.js" />
     <Content Include="scripts\libs\ProtoClass.js" />
     <Content Include="scripts\libs\ProtoClass.min.js" />
-    <Content Include="scripts\myGame.js" />
+    <Content Include="scripts\TanksGame.js" />
     <Content Include="scripts\ScoresNS.js" />
-    <Content Include="scripts\start.js" />
+    <Content Include="scripts\Start.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

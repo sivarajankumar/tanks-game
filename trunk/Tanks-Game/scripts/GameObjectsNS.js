@@ -29,7 +29,6 @@ var gameObjectsNS = (function () {
             return container;
         },
         remove: function () {
-            //console.log(this.id + " removed");
             $("#" + this.id).remove();
         },
         left: function (position) {
@@ -77,9 +76,6 @@ var gameObjectsNS = (function () {
             $super(id, animation, options);
             this.speed = speed;
         },
-        move: function () {
-            // this.topLeft.update(this.speed);
-        },
         changeDirection: function () { }
     });
 
@@ -105,18 +101,12 @@ var gameObjectsNS = (function () {
             this.isMoving = false;
             this.canShoot = true;
         },
-        move: function (direction) {
-            // this.topLeft.update(direction);
-        },
         shoot: function (id, animation, speed, options, direction, isEnemy) {
             if (this.canShoot) {
-                //console.log("shooted!!!!");
                 var newBullet = new Bullet(id, animation, speed, options, this.direction, false);
-
-                //this.setShootingInterval = setInterval(this._setShooting, 1000);
                 return newBullet;
             }
-        },
+        }
     });
 
     var EnemyTank = Class.create(MovingObject, {
@@ -125,7 +115,6 @@ var gameObjectsNS = (function () {
             this.isAlive = true;
             this.direction = "down";
         },
-
         changeDirection: function () {
             var randomNumber = (Math.random() * 4) | 0;
             switch (randomNumber) {
@@ -143,7 +132,6 @@ var gameObjectsNS = (function () {
                     break;
             }
         },
-
         shoot: function (id, animation, speed, options, direction, isEnemy) {
             var newBullet = new Bullet(id, animation, speed, options, direction, isEnemy);
 
@@ -153,16 +141,11 @@ var gameObjectsNS = (function () {
 
     var Bullet = Class.create(MovingObject, {
         initialize: function ($super, id, animation, speed, options, direction, isEnemy) {
-            //console.log(direction);
             $super(id, animation, speed, options);
             this.isDestroyed = false;
             this.direction = direction;
             this.isEnemy = isEnemy;
-            // TODO: Property for shot origin!!!
-        },
-        move: function () {
-            //this.topLeft.update(this.direction); // TODO: Reconsider!!!
-        },
+        }
     });
 
     return {
