@@ -7,9 +7,11 @@ gf.initialize = function(options) {
     $.extend(gf, options);
 } 
 
+
 /**
  * This function adds a sprite the div defined by the fir'st argument
  **/
+ /*
 gf.spriteFragment = $("<div class='gf_sprite' style='position: absolute; overflow: hidden;'></div>");
 gf.addSprite = function(parent, divId, options){
     var options = $.extend({
@@ -30,7 +32,7 @@ gf.addSprite = function(parent, divId, options){
     parent.append(sprite);
     return sprite;
 }
-
+*/
 
 /**
  * This function adds a sprite the div defined by the fir'st argument

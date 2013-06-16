@@ -33,7 +33,7 @@ var gameObjectsNS = (function () {
             return container;
         },
 
-        changeDirection : function () {
+        changeDirection: function () {
             var rndNum = Math.floor(Math.random() * 4);
             switch (rndNum) {
                 case 0:
@@ -49,7 +49,43 @@ var gameObjectsNS = (function () {
                     this.direction = "down";
                     break;
             }
-        }
+        },
+
+        left: function (position) {
+            if (position) {
+                this.container.css("left", position);
+                gameObject.options.x = position;
+            } else {
+                return this.options.x;
+            }
+        },
+
+        top: function (position) {
+            if (position) {
+                this.container.css("top", position);
+                gameObject.options.y = position;
+            } else {
+                return this.options.y;
+            }
+        },
+
+        width: function (dimension) {
+            if (dimension) {
+                this.container.css("width", dimension);
+                gameObject.options.width = dimension;
+            } else {
+                return this.options.width;
+            }
+        },
+
+        height: function (dimension) {
+            if (dimension) {
+                this.container.css("height", dimension);
+                gameObject.options.height = dimension;
+            } else {
+                return this.options.height;
+            }
+        },
     });
 
     var StaticObject = Class.create(GameObject, {
@@ -91,7 +127,7 @@ var gameObjectsNS = (function () {
             this.topLeft.update(direction);
         },
         shoot: function () {
-          // TODO: Implement logic to shoot!!!  // this.shouldShoot = true;
+            // TODO: Implement logic to shoot!!!  // this.shouldShoot = true;
         },
     });
 
