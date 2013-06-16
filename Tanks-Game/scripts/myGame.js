@@ -17,6 +17,13 @@ $(function() {
 		width: 34,
 	})
 
+    var standardTankOptions = {
+        x: 34, 
+        y: 34, 
+        width: 34, 
+        height: 34,
+    }
+
 	var playerAnim = {
 		move: new gf.animation({
 	        url : "images/player-tank.png",
@@ -135,11 +142,11 @@ $(function() {
 	}
 	var addTanks = function() {
 		if (tanks.length < 10) {
-			var newTank = new gameObjectsNS.GameObject("tank" + tanks.length, tankAnim,  {x: 34, y: 34});
+			var newTank = new gameObjectsNS.EnemyTank("tank" + tanks.length, tankAnim, standardTankOptions);
 			//newTank.div = newTank.container;
             //console.log(newTank.container);
 			gf.setAnimation(newTank.container, tankAnim);
-            console.log(newTank.container);
+            //console.log(newTank.container);
             container.append(newTank.container);
 			tanks.push(newTank);
 		}
