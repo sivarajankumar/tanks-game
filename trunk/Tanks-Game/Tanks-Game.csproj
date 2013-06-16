@@ -67,6 +67,7 @@
     <Content Include="scripts\libs\ProtoClass.min.js" />
     <Content Include="scripts\myGame.js" />
     <Content Include="scripts\ScoresNS.js" />
+    <Content Include="scripts\start.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
