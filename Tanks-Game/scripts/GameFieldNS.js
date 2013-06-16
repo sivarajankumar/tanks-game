@@ -7,7 +7,7 @@
         }
     });
 
-    var FieldPosition = Class.create({
+    var Position = Class.create({
         initialize: function (xCoord, yCoord) {
             this.xCoord = xCoord;
             this.yCoord = yCoord;
@@ -23,6 +23,6 @@
 
     return {
         Field: Field,
-        FieldPosition: FieldPosition
+        Position: Position
     }
 })();
