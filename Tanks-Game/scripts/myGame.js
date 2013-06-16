@@ -72,6 +72,11 @@ $(function() {
     			 [1, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     			 [1, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     			 [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                 [1, 0, 0, 0, 2, 0, 0, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 1],
+                 [1, 0, 0, 0, 2, 0, 0, 0, 0, 4, 4, 4, 0, 4, 0, 0, 0, 0, 0, 1],
+                 [1, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                 [1, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                 [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                  [5, 5, 5, 5, 5, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 5, 5, 5]];
      
 	//Adding start button
@@ -92,7 +97,7 @@ $(function() {
 
 		container = $("#container");
 		group           = gf.addGroup(container,"group");
-        tilemap         = gf.addTilemap(group, "level", {tileWidth: 34, tileHeight: 34, width: 20, height: 10, map: level, animations: tiles});
+        tilemap         = gf.addTilemap(group, "level", {tileWidth: 34, tileHeight: 34, width: 20, height: 15, map: level, animations: tiles});
 
     	//gf.addSprite(container,"spriteTest", {width: 23, height: 24});
     	player.div = gf.addSprite(container,"player", { x: 630, y: 60, width: 34, height: 34});
