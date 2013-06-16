@@ -1,7 +1,7 @@
 var gameObjectsNS = (function () {
     var GameObject = Class.create({
-        initialize: function (id, animation, options) {
-            var options = $.extend({
+        initialize: function (id, animation, imageOptions) {
+            var imageOptions = $.extend({
                 x: 0,
                 y: 0,
                 width: 34,
@@ -10,32 +10,113 @@ var gameObjectsNS = (function () {
                 flipV: false,
                 rotate: 0,
                 scale: 1
-            }, options);
+            }, imageOptions);
 
             this.id = id;
             this.animation = animation;
-            this.options = options;
-
-            this.direction = "down";
-
+            this.imageOptions = imageOptions;
             this.container = this._getContainer();
         },
         _getContainer: function () {
-            var container;
-            container = $("<div></div>");
+            var container = $("<div></div>");
             container.attr("id", this.id);
-            container.css("width", this.options.width);
-            container.css("height", this.options.height);
-            container.css("left", this.options.x);
-            container.css("top", this.options.y);
+            container.css("width", this.imageOptions.width);
+            container.css("height", this.imageOptions.height);
+            container.css("left", this.imageOptions.x);
+            container.css("top", this.imageOptions.y);
             container.css("position", "absolute");
             container.css("overflow", "hidden");
             return container;
         },
+        left: function (position) {
+            if (position) {
+                this.container.css("left", position);
+                gameObject.imageOptions.x = position;
+            } else {
+                return this.imageOptions.x;
+            }
+        },
+        top: function (position) {
+            if (position) {
+                this.container.css("top", position);
+                gameObject.imageOptions.y = position;
+            } else {
+                return this.imageOptions.y;
+            }
+        },
+        width: function (dimension) {
+            if (dimension) {
+                this.container.css("width", dimension);
+                gameObject.imageOptions.width = dimension;
+            } else {
+                return this.imageOptions.width;
+            }
+        },
+        height: function (dimension) {
+            if (dimension) {
+                this.container.css("height", dimension);
+                gameObject.imageOptions.height = dimension;
+            } else {
+                return this.imageOptions.height;
+            }
+        }
+    });
 
+    var StaticObject = Class.create(GameObject, {
+        initialize: function ($super, id, animation, imageOptions) {
+            $super(id, animation, imageOptions);
+        }
+    });
+
+    var MovingObject = Class.create(GameObject, {
+        initialize: function ($super, id, animation, speed, imageOptions) {
+            $super(id, animation, imageOptions);
+            this.speed = speed;
+        },
+        move: function () {
+            // this.topLeft.update(this.speed);
+        },
+        changeDirection: function () { }
+    });
+
+    // Static objects
+    var BrickWall = Class.create(StaticObject, {
+        initialize: function ($super, id, animation, imageOptions) {
+            $super(id, animation, imageOptions);
+            this.isDestroyed = false;
+        }
+    });
+
+    var SteelWall = Class.create(StaticObject, {
+        initialize: function ($super, id, animation, imageOptions) {
+            $super(id, animation, imageOptions);
+        }
+    });
+
+    // Moving objects
+    var PlayerTank = Class.create(MovingObject, {
+        initialize: function ($super, id, animation, speed, imageOptions) {
+            $super(id, animation, speed, imageOptions);
+            this.isAlive = true;
+            this.isMoving = false;
+        },
+        move: function (direction) {
+            // this.topLeft.update(direction);
+        },
+        shoot: function () {
+            // TODO: Implement logic to shoot!!!  // this.shouldShoot = true;
+        },
+    });
+
+    var EnemyTank = Class.create(MovingObject, {
+        initialize: function ($super, id, animation, speed, imageOptions) {
+            $super(id, animation, speed, imageOptions);
+            this.isAlive = true;
+            this.direction = "down";
+        },
         changeDirection: function () {
-            var rndNum = Math.floor(Math.random() * 4);
-            switch (rndNum) {
+            var randomNumber = (Math.random() * 4) | 0;
+            switch (randomNumber) {
                 case 0:
                     this.direction = "left";
                     break;
@@ -49,107 +130,18 @@ var gameObjectsNS = (function () {
                     this.direction = "down";
                     break;
             }
-        },
-
-        left: function (position) {
-            if (position) {
-                this.container.css("left", position);
-                gameObject.options.x = position;
-            } else {
-                return this.options.x;
-            }
-        },
-
-        top: function (position) {
-            if (position) {
-                this.container.css("top", position);
-                gameObject.options.y = position;
-            } else {
-                return this.options.y;
-            }
-        },
-
-        width: function (dimension) {
-            if (dimension) {
-                this.container.css("width", dimension);
-                gameObject.options.width = dimension;
-            } else {
-                return this.options.width;
-            }
-        },
-
-        height: function (dimension) {
-            if (dimension) {
-                this.container.css("height", dimension);
-                gameObject.options.height = dimension;
-            } else {
-                return this.options.height;
-            }
-        },
-    });
-
-    var StaticObject = Class.create(GameObject, {
-        initialize: function ($super, id, animation, topLeft, options) {
-            $super(id, animation, topLeft, options);
-        }
-    });
-
-    var MovingObject = Class.create(GameObject, {
-        initialize: function ($super, id, animation, topLeft, speed, options) {
-            $super(id, animation, topLeft, options);
-            this.speed = speed;
-        },
-        move: function () {
-            this.topLeft.update(this.speed);
-        }
-    });
-
-    // Static objects
-    var BrickWall = Class.create(StaticObject, {
-        initialize: function ($super, id, animation, topLeft, options) {
-            $super(id, animation, topLeft, options);
-            this.isDestroyed = false;
-        }
-    });
-
-    var SteelWall = Class.create(StaticObject, {
-        initialize: function ($super, id, animation, topLeft, options) {
-            $super(id, animation, topLeft, options);
-        }
-    });
-
-    // Moving objects
-    var PlayerTank = Class.create(MovingObject, {
-        initialize: function ($super, id, animation, topLeft, speed, options) {
-            $super(id, animation, topLeft, speed, options);
-        },
-        move: function (direction) {
-            this.topLeft.update(direction);
-        },
-        shoot: function () {
-            // TODO: Implement logic to shoot!!!  // this.shouldShoot = true;
-        },
-    });
-
-    var EnemyTank = Class.create(MovingObject, {
-        initialize: function ($super, id, animation, topLeft, speed, options) {
-            $super(id, animation, topLeft, speed, options);
-            this.isAlive = true;
-        },
-        move: function () {
-            // TODO: Override with logic for 50% guessing player's move!!!
         }
     });
 
     var Bullet = Class.create(MovingObject, {
-        initialize: function ($super, id, animation, topLeft, speed, direction, options) {
-            $super(id, animation, topLeft, speed, options);
+        initialize: function ($super, id, animation, speed, imageOptions, direction) {
+            $super(id, animation, speed, imageOptions);
             this.isDestroyed = false;
             this.direction = direction;
             // TODO: Property for shot origin!!!
         },
         move: function () {
-            this.topLeft.update(this.direction); // TODO: Reconsider!!!
+            //this.topLeft.update(this.direction); // TODO: Reconsider!!!
         }
     });
 

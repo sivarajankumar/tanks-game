@@ -3,17 +3,16 @@ var gf = {
 };
 
 //For easier manipulation of main game Framework parameters
-gf.initialize = function(options) {
+gf.initialize = function (options) {
     $.extend(gf, options);
-} 
+}
 
 
 /**
  * This function adds a sprite the div defined by the fir'st argument
  **/
- /*
 gf.spriteFragment = $("<div class='gf_sprite' style='position: absolute; overflow: hidden;'></div>");
-gf.addSprite = function(parent, divId, options){
+gf.addSprite = function (parent, divId, options) {
     var options = $.extend({
         x: 0,
         y: 0,
@@ -25,20 +24,20 @@ gf.addSprite = function(parent, divId, options){
         scale: 1
     }, options);
     var sprite = gf.spriteFragment.clone().css({
-            left:   options.x,
-            top:    options.y,
-            width:  options.width,
-            height: options.height}).attr("id",divId).data("gf",options);
+        left: options.x,
+        top: options.y,
+        width: options.width,
+        height: options.height
+    }).attr("id", divId).data("gf", options);
     parent.append(sprite);
     return sprite;
 }
-*/
 
 /**
  * This function adds a sprite the div defined by the fir'st argument
  **/
 gf.groupFragment = $("<div class='gf_group' style='position: absolute; overflow: visible;'></div>");
-gf.addGroup = function(parent, divId, options){
+gf.addGroup = function (parent, divId, options) {
     var options = $.extend({
         x: 0,
         y: 0,
@@ -48,8 +47,9 @@ gf.addGroup = function(parent, divId, options){
         scale: 1
     }, options);
     var group = gf.groupFragment.clone().css({
-            left:   options.x,
-            top:    options.y}).attr("id",divId).data("gf",options);
+        left: options.x,
+        top: options.y
+    }).attr("id", divId).data("gf", options);
     parent.append(group);
     return group;
 }
@@ -57,28 +57,28 @@ gf.addGroup = function(parent, divId, options){
 /**
  * This function sets the current frame.
  **/
-gf.setFrame = function(div, animation) {
+gf.setFrame = function (div, animation) {
     div.css("backgroundPosition", "-" + (animation.currentFrame * animation.width + animation.offset) + "px 0px");
 }
 
 /**
  * Animation Object.
  **/
-gf.animation = function(options) {
+gf.animation = function (options) {
     var defaultValues = {
-        url : false,
-        width : 64,
-        numberOfFrames : 1,
-        currentFrame : 0,
-        rate : 1,
+        url: false,
+        width: 64,
+        numberOfFrames: 1,
+        currentFrame: 0,
+        rate: 1,
         offset: 0
     }
     $.extend(this, defaultValues, options);
-    if(options.rate){
+    if (options.rate) {
         // normalize the animation rate
         this.rate = Math.round(this.rate / gf.baseRate);
     }
-    if(this.url){
+    if (this.url) {
         gf.addImage(this.url);
     }
 }
@@ -88,29 +88,29 @@ gf.animations = [];
 /**
  * Sets the animation for the given sprite.
  **/
-gf.setAnimation = function(div, animation, loop){
+gf.setAnimation = function (div, animation, loop) {
     var animate = {
         animation: $.extend({}, animation),
         div: div,
         loop: loop,
         counter: 0
     }
-    
-    if(animation.url){
-        div.css("backgroundImage","url('"+animation.url+"')");
+
+    if (animation.url) {
+        div.css("backgroundImage", "url('" + animation.url + "')");
     }
-    
+
     // search if this div already has an animation
     var divFound = false;
     for (var i = 0; i < gf.animations.length; i++) {
-        if(gf.animations[i].div.is(div)){
+        if (gf.animations[i].div.is(div)) {
             divFound = true;
             gf.animations[i] = animate;
         }
     }
-    
+
     // otherwise we add it to the array
-    if(!divFound) {
+    if (!divFound) {
         gf.animations.push(animate);
     }
 }
@@ -123,7 +123,7 @@ gf.imagesToPreload = [];
 /**
  * Add an image to the list of image to preload
  **/
-gf.addImage = function(url) {
+gf.addImage = function (url) {
     if ($.inArray(url, gf.imagesToPreload) < 0) {
         gf.imagesToPreload.push();
     }
@@ -131,28 +131,28 @@ gf.addImage = function(url) {
 };
 
 
-gf.intersect = function(a1,a2,b1,b2){
+gf.intersect = function (a1, a2, b1, b2) {
     var i1 = Math.min(Math.max(a1, b1), a2);
     var i2 = Math.max(Math.min(a2, b2), a1);
     return [i1, i2];
-} 
+}
 /**
  * This function returns the indexes coresponding to the given box in the tilemap.
  */
-gf.tilemapBox = function(tilemapOptions, boxOptions){
-    var tmX  = tilemapOptions.x;
+gf.tilemapBox = function (tilemapOptions, boxOptions) {
+    var tmX = tilemapOptions.x;
     var tmXW = tilemapOptions.x + tilemapOptions.width * tilemapOptions.tileWidth;
-    var tmY  = tilemapOptions.y;
+    var tmY = tilemapOptions.y;
     var tmYH = tilemapOptions.y + tilemapOptions.height * tilemapOptions.tileHeight;
-    
-    var bX  = boxOptions.x;
+
+    var bX = boxOptions.x;
     var bXW = boxOptions.x + boxOptions.width;
-    var bY  = boxOptions.y;
+    var bY = boxOptions.y;
     var bYH = boxOptions.y + boxOptions.height;
-    
-    var x = gf.intersect(tmX,tmXW, bX, bXW);
+
+    var x = gf.intersect(tmX, tmXW, bX, bXW);
     var y = gf.intersect(tmY, tmYH, bY, bYH);
-    
+
     return {
         x1: Math.floor((x[0] - tilemapOptions.x) / tilemapOptions.tileWidth),
         y1: Math.floor((y[0] - tilemapOptions.y) / tilemapOptions.tileHeight),
@@ -162,7 +162,7 @@ gf.tilemapBox = function(tilemapOptions, boxOptions){
 }
 
 gf.tilemapFragment = $("<div class='gf_tilemap' style='position: absolute'></div>");
-gf.addTilemap = function(parent, divId, options){
+gf.addTilemap = function (parent, divId, options) {
     var options = $.extend({
         x: 0,
         y: 0,
@@ -173,29 +173,30 @@ gf.addTilemap = function(parent, divId, options){
         map: [],
         animations: []
     }, options);
-    
+
     //create line and row fragment:
-    var tilemap = gf.tilemapFragment.clone().attr("id",divId).data("gf",options);
-    for (var i=0; i < options.height; i++){
-        for(var j=0; j < options.width; j++) {
+    var tilemap = gf.tilemapFragment.clone().attr("id", divId).data("gf", options);
+    for (var i = 0; i < options.height; i++) {
+        for (var j = 0; j < options.width; j++) {
             var animationIndex = options.map[i][j];
-            
-            if(animationIndex > 0){
+
+            if (animationIndex > 0) {
                 var tileOptions = {
-                    x: options.x + j*options.tileWidth,
-                    y: options.y + i*options.tileHeight,
+                    x: options.x + j * options.tileWidth,
+                    y: options.y + i * options.tileHeight,
                     width: options.tileWidth,
                     height: options.tileHeight
                 }
                 var tile = gf.spriteFragment.clone().css({
-                    left:   tileOptions.x,
-                    top:    tileOptions.y,
-                    width:  tileOptions.width,
-                    height: tileOptions.height}
-                ).addClass("gf_line_"+i).addClass("gf_column_"+j).data("gf", tileOptions);
-                
-                gf.setAnimation(tile, options.animations[animationIndex-1]);
-                
+                    left: tileOptions.x,
+                    top: tileOptions.y,
+                    width: tileOptions.width,
+                    height: tileOptions.height
+                }
+                ).addClass("gf_line_" + i).addClass("gf_column_" + j).data("gf", tileOptions);
+
+                gf.setAnimation(tile, options.animations[animationIndex - 1]);
+
                 tilemap.append(tile);
             }
         }
@@ -204,26 +205,26 @@ gf.addTilemap = function(parent, divId, options){
     return tilemap;
 }
 
-gf.tilemapCollide = function(tilemap, box){
+gf.tilemapCollide = function (tilemap, box) {
     var options = tilemap.data("gf");
     var collisionBox = gf.tilemapBox(options, box);
     var divs = []
-    
-    for (var i = collisionBox.y1; i < collisionBox.y2; i++){
-        for (var j = collisionBox.x1; j < collisionBox.x2; j++){
+
+    for (var i = collisionBox.y1; i < collisionBox.y2; i++) {
+        for (var j = collisionBox.x1; j < collisionBox.x2; j++) {
             var index = options.map[i][j];
-            if( index > 0){
-                divs.push(tilemap.find(".gf_line_"+i+".gf_column_"+j));
+            if (index > 0) {
+                divs.push(tilemap.find(".gf_line_" + i + ".gf_column_" + j));
             }
         }
     }
     return divs;
 }
 
-gf.spriteCollide = function(sprite1, sprite2){
+gf.spriteCollide = function (sprite1, sprite2) {
     var option1 = sprite1.data("gf");
     var option2 = sprite2.data("gf");
-    
+
     var x = gf.intersect(
         option1.x,
         option1.x + option1.width,
@@ -234,81 +235,80 @@ gf.spriteCollide = function(sprite1, sprite2){
         option1.y + option1.height,
         option2.y,
         option2.y + option2.height);
-    
-    if (x[0] == x[1] || y[0] == y[1]){
+
+    if (x[0] == x[1] || y[0] == y[1]) {
         return false;
     } else {
         return true;
     }
 }
 
- /**
-  * Movements (WE are not using transform, different on different browsers)
-  */
-    /**
-     * This function sets or returns the position along the x-axis.
-     **/
-    gf.x = function(gameObject,position) {
-        if(position) {
-            gameObject.container.css("left", position);
-            gameObject.options.x = position;
-        } else {
-            //console.log(gameObject);
-            return gameObject.options.x; 
-        }
+/**
+ * Movements (WE are not using transform, different on different browsers)
+ */
+/**
+ * This function sets or returns the position along the x-axis.
+ **/
+gf.x = function (gameObject, position) {
+    if (position) {
+        gameObject.container.css("left", position);
+        gameObject.options.x = position;
+    } else {
+        //console.log(gameObject);
+        return gameObject.options.x;
     }
-    /**
-     * This function sets or returns the position along the y-axis.
-     **/
-    gf.y = function(gameObject,position) {
-        if(position) {
-            gameObject.container.css("top", position); 
-            
-            gameObject.options.y = position;
-        } else {
-            //console.log(gameObject);
-            return gameObject.options.y; 
-        }
+}
+/**
+ * This function sets or returns the position along the y-axis.
+ **/
+gf.y = function (gameObject, position) {
+    if (position) {
+        gameObject.container.css("top", position);
+        gameObject.options.y = position;
+    } else {
+        //console.log(gameObject);
+        return gameObject.options.y;
     }
+}
 /**
  * End of Movements
  */
 
- gf.transform = function(gameObject, newOptions){
-    if(newOptions.flipH !== undefined){
+gf.transform = function (gameObject, newOptions) {
+    if (newOptions.flipH !== undefined) {
         gameObject.options.flipH = newOptions.flipH;
     }
-    if(newOptions.flipV !== undefined){
+    if (newOptions.flipV !== undefined) {
         gameObject.options.flipV = newOptions.flipV;
     }
-    if(newOptions.rotate !== undefined){
+    if (newOptions.rotate !== undefined) {
         gameObject.options.rotate = newOptions.rotate;
     }
-    if(newOptions.scale !== undefined){
+    if (newOptions.scale !== undefined) {
         gameObject.options.scale = newOptions.scale;
     }
     var factorH = gameObject.options.flipH ? -1 : 1;
     var factorV = gameObject.options.flipV ? -1 : 1;
-    gameObject.container.css("transform", "rotate("+gameObject.options.rotate+
-        "deg) scale("+(gameObject.options.scale*factorH)
-        +","+(gameObject.options.scale*factorV)+")");
+    gameObject.container.css("transform", "rotate(" + gameObject.options.rotate +
+        "deg) scale(" + (gameObject.options.scale * factorH)
+        + "," + (gameObject.options.scale * factorV) + ")");
 }
 
-gf.width = function(gameObject,dimension) {
-    if(dimension) {
-        gameObject.container.css("width", position); 
+gf.width = function (gameObject, dimension) {
+    if (dimension) {
+        gameObject.container.css("width", position);
         gameObject.options.width = position;
     } else {
-        return gameObject.options.width; 
+        return gameObject.options.width;
     }
 }
 
-gf.height = function(gameObject,dimension) {
-    if(dimension) {
-        gameObject.container.css("height", position); 
+gf.height = function (gameObject, dimension) {
+    if (dimension) {
+        gameObject.container.css("height", position);
         gameObject.options.height = position;
     } else {
-        return gameObject.options.height; 
+        return gameObject.options.height;
     }
 }
 
@@ -316,16 +316,16 @@ gf.height = function(gameObject,dimension) {
  * Start the preloading of the images.
  * After preloading is finished, start the main refresh Method
  **/
-gf.startGame = function(endCallback, progressCallback) {
+gf.startGame = function (endCallback, progressCallback) {
     var images = [];
     var total = gf.imagesToPreload.length;
-    
+
     for (var i = 0; i < total; i++) {
         var image = new Image();
         images.push(image);
         image.src = gf.imagesToPreload[i];
     }
-    var preloadingPoller = setInterval(function() {
+    var preloadingPoller = setInterval(function () {
         var counter = 0;
         var total = gf.imagesToPreload.length;
         for (var i = 0; i < total; i++) {
@@ -350,7 +350,7 @@ gf.startGame = function(endCallback, progressCallback) {
 //list of functionis to be called on timer
 gf.callbacks = [];
 
-gf.addCallback = function(callback, rate){
+gf.addCallback = function (callback, rate) {
     gf.callbacks.push({
         callback: callback,
         rate: Math.round(rate / gf.baseRate),
@@ -358,25 +358,25 @@ gf.addCallback = function(callback, rate){
     });
 }
 
-gf.removeCallback = function(callback) {
+gf.removeCallback = function (callback) {
     gf.callbacks.remove(callback);
 }
 
 //Internal refresh rate, will invoke all other loop actions
-gf.refreshGame = function (){
+gf.refreshGame = function () {
     // update animations
     var finishedAnimations = [];
-    
-    for (var i=0; i < gf.animations.length; i++) {
-        
+
+    for (var i = 0; i < gf.animations.length; i++) {
+
         var animate = gf.animations[i];
-        
+
         animate.counter++;
         if (animate.counter == animate.animation.rate) {
             animate.counter = 0;
             animate.animation.currentFrame++;
             //One time animations or repeated animations
-            if(!animate.loop && animate.animation.currentFrame > animate.animation.numberOfFrame){
+            if (!animate.loop && animate.animation.currentFrame > animate.animation.numberOfFrame) {
                 finishedAnimations.push(i);
             } else {
                 animate.animation.currentFrame %= animate.animation.numberOfFrames;
@@ -384,14 +384,14 @@ gf.refreshGame = function (){
             }
         }
     }
-    for(var i=0; i < finishedAnimations.length; i++){
+    for (var i = 0; i < finishedAnimations.length; i++) {
         gf.animations.splice(finishedAnimations[i], 1);
     }
-    
+
     // execute the callbacks
-    for (var i=0; i < gf.callbacks.length; i++) {
-        var call  = gf.callbacks[i];
-        
+    for (var i = 0; i < gf.callbacks.length; i++) {
+        var call = gf.callbacks[i];
+
         call.counter++;
         if (call.counter == call.rate) {
             call.counter = 0;
@@ -409,9 +409,9 @@ gf.refreshGame = function (){
  */
 gf.keyboard = [];
 // keyboard state handler
- $(document).keydown(function(event){
+$(document).keydown(function (event) {
     gf.keyboard[event.keyCode] = true;
 });
-$(document).keyup(function(event){
+$(document).keyup(function (event) {
     gf.keyboard[event.keyCode] = false;
 });

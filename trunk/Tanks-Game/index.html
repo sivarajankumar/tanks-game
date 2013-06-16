@@ -9,13 +9,19 @@
 </head>
 <body>
     <div id="myGame"></div>
+    <div id="Div1"></div>
     <script src="scripts/GameObjectsNS.js"></script>
     <script src="scripts/FieldPosition.js"></script>
     <script src="scripts/GameFieldNS.js"></script>
     <script src="scripts/ScoresNS.js"></script>
     <script src="scripts/myGame.js"></script>
     <script>
-
+        var scores = new scoresNS.ScoreBoard("#Div1");
+        scores.add(new scoresNS.Score("Pesho1", 22));
+        scores.add(new scoresNS.Score("Pesho2", 2));
+        scores.add(new scoresNS.Score("Pesho3", 1));
+        scores.add(new scoresNS.Score("Pesho4", 11));
+        scores.render();
     </script>
 </body>
 </html>
