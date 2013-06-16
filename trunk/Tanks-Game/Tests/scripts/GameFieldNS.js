@@ -4,11 +4,8 @@ var Field = Class.create({
         this.container = container;
         this.width = width;
         this.height = height;
-    },
-    //Used for testing
-    returnProperty: function() {
-    return { container:this.container, width:this.width, height:this.height};
-}
+    }
+
 });
 
 var FieldPosition = Class.create({
@@ -22,10 +19,6 @@ var FieldPosition = Class.create({
     },
     equals: function (other) {
         return this.xCoord == other.xCoord && this.yCoord == other.yCoord;
-    },
-    //Used for testing
-    returnProperty: function () {
-        return { xCoord: this.xCoord, yCoord: this.yCoord };
     }
 });
 return {
