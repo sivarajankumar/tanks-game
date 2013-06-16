@@ -16,7 +16,7 @@
         add: function (newScore) {
             this.scores.push(newScore);
         },
-        getTopScores: function () {
+        _getTopScores: function () {
             var topScores, i;
             this.scores.orderBy(this._orderScores);
 
@@ -29,8 +29,19 @@
 
             return topScores;
         },
-        render: function () {
-          // TODO: Implement with jQuery
+        getRendered: function () {
+            var container, topScoresList, i, topScoresCount, topScores;
+            container = $("<div></div>");
+            container.attr("id", "top-scores");
+            topScoresList = $("<ul></ul>");
+            topScores = this._getTopScores;
+            topScoresCount = topScores.length;
+            for (i = 0; i < topScoresCount; i++) {
+                topScoresList.append($("<li></li>").html(topScores[i]));
+            }
+
+            container.append(topScoresList);
+            return container;
         },
         _orderScores: function (firstScore, secondScore) {
             return firstScore.points - secondScore.points;

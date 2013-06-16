@@ -58,9 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="index.html" />
+    <Content Include="scripts\Animation.js" />
     <Content Include="scripts\GameFieldNS.js" />
     <Content Include="scripts\GameObjectsNS.js" />
-    <Content Include="scripts\FieldPosition.js" />
     <Content Include="scripts\libs\jquery-1.10.1.js" />
     <Content Include="scripts\libs\ProtoClass.js" />
     <Content Include="scripts\libs\ProtoClass.min.js" />
