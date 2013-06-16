@@ -246,63 +246,67 @@ gf.spriteCollide = function(sprite1, sprite2){
     /**
      * This function sets or returns the position along the x-axis.
      **/
-    gf.x = function(div,position) {
+    gf.x = function(gameObject,position) {
         if(position) {
-            div.css("left", position);
-            div.data("gf").x = position;
+            gameObject.container.css("left", position);
+            gameObject.options.x = position;
         } else {
-            return div.data("gf").x; 
+            //console.log(gameObject);
+            return gameObject.options.x; 
         }
     }
     /**
      * This function sets or returns the position along the y-axis.
      **/
-    gf.y = function(div,position) {
+    gf.y = function(gameObject,position) {
         if(position) {
-            div.css("top", position); 
-            div.data("gf").y = position;
+            gameObject.container.css("top", position); 
+            
+            gameObject.options.y = position;
         } else {
-            return div.data("gf").y; 
+            //console.log(gameObject);
+            return gameObject.options.y; 
         }
     }
 /**
  * End of Movements
  */
 
- gf.transform = function(div, options){
-    var gf = div.data("gf");
-    if(options.flipH !== undefined){
-        gf.flipH = options.flipH;
+ gf.transform = function(gameObject, newOptions){
+    if(newOptions.flipH !== undefined){
+        gameObject.options.flipH = newOptions.flipH;
     }
-    if(options.flipV !== undefined){
-        gf.flipV = options.flipV;
+    if(newOptions.flipV !== undefined){
+        gameObject.options.flipV = newOptions.flipV;
     }
-    if(options.rotate !== undefined){
-        gf.rotate = options.rotate;
+    if(newOptions.rotate !== undefined){
+        gameObject.options.rotate = newOptions.rotate;
     }
-    if(options.scale !== undefined){
-        gf.scale = options.scale;
+    if(newOptions.scale !== undefined){
+        gameObject.options.scale = newOptions.scale;
     }
-    var factorH = gf.flipH ? -1 : 1;
-    var factorV = gf.flipV ? -1 : 1;
-    div.css("transform", "rotate("+gf.rotate+"deg) scale("+(gf.scale*factorH)+","+(gf.scale*factorV)+")");
+    var factorH = gameObject.options.flipH ? -1 : 1;
+    var factorV = gameObject.options.flipV ? -1 : 1;
+    gameObject.container.css("transform", "rotate("+gameObject.options.rotate+
+        "deg) scale("+(gameObject.options.scale*factorH)
+        +","+(gameObject.options.scale*factorV)+")");
 }
 
-gf.width = function(div,dimension) {
+gf.width = function(gameObject,dimension) {
     if(dimension) {
-        div.css("width", position); 
-        div.data("gf").width = position;
+        gameObject.container.css("width", position); 
+        gameObject.options.width = position;
     } else {
-        return div.data("gf").width; 
+        return gameObject.options.width; 
     }
 }
 
-gf.height = function(div,dimension) {
+gf.height = function(gameObject,dimension) {
     if(dimension) {
-        div.css("height", position); 
-        div.data("gf").height = position;
+        gameObject.container.css("height", position); 
+        gameObject.options.height = position;
     } else {
-        return div.data("gf").height; 
+        return gameObject.options.height; 
     }
 }
 
