@@ -1,15 +1,4 @@
 $(function () {
-    //Initial loading of images
-    var totalNumberOfFrame = 6;
-    var frameNumber = 0;
-
-    var firstAnim = new gf.animation({
-        url: "images/spritesheet_example.png",
-        numberOfFrames: 6,
-        rate: 300,
-        width: 23
-    });
-
     var tankAnim = new gf.animation({
         url: "images/player-tank.png",
         numberOfFrames: 2,
@@ -101,9 +90,6 @@ $(function () {
  		gf.startGame(initialize);
  	});
 
-    //Adding start button
-    $("#myGame").append("<img id='startButton' src='images/start.jpg' style='width: 40px; height: 40px;' />");
-    //start button
     $("#startButton").click(function () {
         //Wait for the images to load then init the game elements
         gf.startGame(initialize);
@@ -121,19 +107,14 @@ $(function () {
         group = gf.addGroup(container, "group");
         tilemap = gf.addTilemap(group, "level", { tileWidth: 34, tileHeight: 34, width: 20, height: 15, map: level, animations: tiles });
 
-        //gf.addSprite(container,"spriteTest", {width: 23, height: 24});
         player.container = gf.addSprite(container, "player", { x: 600, y: 60, width: 34, height: 34 });
 
-        //gf.setAnimation($("#spriteTest"), firstAnim);
         gf.setAnimation(player.container, playerAnim.stand);
 
-        //Main game loop
         gf.addCallback(gameLoop, 100);
 
-        //Changing directions of tanks
         gf.addCallback(changeDirections, 600);
 
-        //Adding new tank
         gf.addCallback(addTanks, 2000);
 
         gf.addCallback(moveBullets, 60);
@@ -155,14 +136,11 @@ $(function () {
         for (var i = 0; i < tanks.length; i++) {
             var movements = tryMoveObject(tanks[i], tanks[i].direction);
             updateMovingObject(tanks[i], movements.horizontalMove, movements.verticalMove)
-            //tanks[i].move();
-            //tanks[i].update();
         }
     }
     var addTanks = function () {
         if (tanks.length < 9) {
             var newTank = new gameObjectsNS.EnemyTank("tank" + tanks.length, tankAnim, 5, standardTankOptions);
-            //newTank.div = newTank.container;
             gf.setAnimation(newTank.container, tankAnim);
             container.append(newTank.container);
             tanks.push(newTank);
@@ -203,7 +181,7 @@ $(function () {
             gf.setAnimation(newBullet.container, bulletAnim);
             container.append(newBullet.container);
             bullets.push(newBullet);
-        };
+        }
     }
 
     var moveBullets = function () {
@@ -218,8 +196,6 @@ $(function () {
             }
         }
 
-
-        //removed all successfulBullets
         for (var j = 0; j < removedBullets.length; j++) {
             for (var i = 0; i < bullets.length; i++) {
                 if (bullets[i] == removedBullets[j]) {
@@ -227,8 +203,7 @@ $(function () {
                     break;
                 }
             }
-        };
-
+        }
     }
 
     var tryMoveObject = function (gameObject, direction, inputStep) {
@@ -239,22 +214,18 @@ $(function () {
         if (inputStep) step = inputStep;
         switch (direction) {
             case "left":
-                //gf.x(target.div, gf.x(target.div) - 5);
                 horizontalMove = -step;
                 gf.transform(gameObject, { rotate: 0, flipH: true });
                 break;
             case "right":
-                //gf.x(target.div, gf.x(target.div) + 5);
                 horizontalMove = step;
                 gf.transform(gameObject, { rotate: 0, flipH: false });
                 break;
             case "up":
-                //gf.y(target.div, gf.y(target.div) - 5);
                 verticalMove = -step;
                 gf.transform(gameObject, { rotate: -90, flipH: false });
                 break;
             default:
-                //gf.y(target.div, gf.y(target.div) + 5);
                 verticalMove = step;
                 gf.transform(gameObject, { rotate: 90, flipH: false });
                 break;
@@ -263,7 +234,7 @@ $(function () {
         return {
             horizontalMove: horizontalMove,
             verticalMove: verticalMove
-        };
+        }
     }
 
     var updateBullet = function (bullet, horizontalMove, verticalMove) {
@@ -312,10 +283,8 @@ $(function () {
             var diffx = (x[0] === newX) ? x[0] - x[1] : x[1] - x[0];
             var diffy = (y[0] === newY) ? y[0] - y[1] : y[1] - y[0];
             if (Math.abs(diffx) > Math.abs(diffy)) {
-                // displace along the y axis
                 newY -= diffy;
             } else {
-                // displace along the x axis
                 newX -= diffx;
             }
         }
@@ -328,14 +297,12 @@ $(function () {
                 var diffx = (x[0] === newX) ? x[0] - x[1] : x[1] - x[0];
                 var diffy = (y[0] === newY) ? y[0] - y[1] : y[1] - y[0];
                 if (Math.abs(diffx) > Math.abs(diffy)) {
-                    // displace along the y axis
                     newY -= diffy;
                 } else {
-                    // displace along the x axis
                     newX -= diffx;
                 }
             }
-        };
+        }
 
         gf.x(gameObject, newX);
         gf.y(gameObject, newY);
