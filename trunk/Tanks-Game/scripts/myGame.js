@@ -17,12 +17,12 @@ $(function() {
 		width: 34,
 	})
 
-    var standardTankOptions = {
-        x: 34, 
-        y: 34, 
-        width: 34, 
-        height: 34,
-    }
+    var bulletAnim = new gf.animation({
+        url: "images/button.png",
+        numberOfFrames: 1,
+        rate: 200,
+        width: 10,
+    })
 
 	var playerAnim = {
 		move: new gf.animation({
@@ -38,6 +38,13 @@ $(function() {
 			width: 34,
     	})
     };
+
+    var standardTankOptions = {
+        x: 334, 
+        y: 334, 
+        width: 34, 
+        height: 34,
+    }
 
     //Tiles
     var tiles = [
@@ -100,7 +107,7 @@ $(function() {
 
 	//Game init
 	var initialize = function () {
-		$("#myGame").append("<div id='container' style='display: none; width: 640px; height: 480px;'>");
+		$("#myGame").append("<div id='container' style='display: none; width: 640px; height: 480px; background-color: black;'>");
 
 		container = $("#container");
 		group           = gf.addGroup(container,"group");
@@ -121,12 +128,16 @@ $(function() {
 		//Adding new tank
 		gf.addCallback(addTanks, 2000);
 
+        gf.addCallback(moveBullets, 60);
+        gf.addCallback(shootTanks, 1500);
+
 		$("#startButton").remove();
         container.css("display", "block");
 	}
 
 	//Moving Game Objects
 	var tanks = [];
+    var bullets = [];
 	var changeDirections = function() {
 		for (var i=0; i < tanks.length; i++) {
 			tanks[i].changeDirection();
@@ -142,7 +153,7 @@ $(function() {
 	}
 	var addTanks = function() {
 		if (tanks.length < 10) {
-			var newTank = new gameObjectsNS.EnemyTank("tank" + tanks.length, tankAnim, standardTankOptions);
+			var newTank = new gameObjectsNS.EnemyTank("tank" + tanks.length, tankAnim, 5, standardTankOptions);
 			//newTank.div = newTank.container;
             //console.log(newTank.container);
 			gf.setAnimation(newTank.container, tankAnim);
@@ -151,6 +162,52 @@ $(function() {
 			tanks.push(newTank);
 		}
 	}
+
+    var shootTanks = function() {
+        var newBullet;
+        for (var i = 0; i < tanks.length; i++) {
+            var posX;
+            var posY;
+            switch(tanks[i].direction) {
+                    case "left":
+                        posX = tanks[i].options.x;
+                        posY = tanks[i].options.y + 10;;
+                        break;
+                    case "right":
+                        posX = tanks[i].options.x + tanks[i].options.width;
+                        posY = tanks[i].options.y + 10;
+                        break;
+                    case "up":
+                        posX = tanks[i].options.x + 10;
+                        posY = tanks[i].options.y;
+                        break;
+                    default:
+                        posX = tanks[i].options.x + 10;
+                        posY = tanks[i].options.y + tanks[i].options.height;
+                        break;
+            }
+
+            var bulletOptions = {
+                x: posX,
+                y: posY,
+                width: 5,
+                height: 5,
+            }
+            newBullet = tanks[i].shoot("bullet" + bullets.length, bulletAnim, 15, bulletOptions, tanks[i].direction); 
+            gf.setAnimation(newBullet.container, bulletAnim);
+            container.append(newBullet.container);
+            bullets.push(newBullet);
+        };
+    }
+
+    var moveBullets = function() {
+        for (var i=0; i < bullets.length; i++) {
+            var movements = tryMoveObject(bullets[i], bullets[i].direction);
+            updateMovingObject(bullets[i], movements.horizontalMove, movements.verticalMove)
+            //tanks[i].move();
+            //tanks[i].update();
+        }
+    }
 
 	var tryMoveObject = function (gameObject, direction, inputStep) {
 		var step = 5;

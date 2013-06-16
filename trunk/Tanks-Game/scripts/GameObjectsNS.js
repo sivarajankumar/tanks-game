@@ -114,6 +114,7 @@ var gameObjectsNS = (function () {
             this.isAlive = true;
             this.direction = "down";
         },
+        
         changeDirection: function () {
             var randomNumber = (Math.random() * 4) | 0;
             switch (randomNumber) {
@@ -130,6 +131,12 @@ var gameObjectsNS = (function () {
                     this.direction = "down";
                     break;
             }
+        },
+
+        shoot: function (id, animation, speed, options, direction) {
+            var newBullet = new Bullet(id, animation, speed, options, direction);
+
+            return newBullet;
         }
     });
 
