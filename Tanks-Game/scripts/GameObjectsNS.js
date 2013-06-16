@@ -1,19 +1,32 @@
 var gameObjectsNS = (function () {
     var GameObject = Class.create({
-        initialize: function (id, animation, topLeft, options) {
+        initialize: function (id, animation, options) {
+            var options = $.extend({
+                x: 0,
+                y: 0,
+                width: 34,
+                height: 34,
+                flipH: false,
+                flipV: false,
+                rotate: 0,
+                scale: 1
+            }, options);
+
             this.id = id;
             this.animation = animation;
-            this.topLeft = topLeft;
             this.options = options;
+
+            this.container = this._getContainer();
         },
-        getRendered: function () {
+        _getContainer: function () {
             var container;
             container = $("<div></div>");
             container.attr("id", this.id);
-            container.css("width", this.animation.width);
-            container.css("heigth", this.animation.width);
-            container.css("left", this.topLeft.xCoord);
-            container.css("top", this.topLeft.yCoord);
+            container.css("width", this.options.width);
+            container.css("heigth", this.options.height);
+            container.css("left", this.options.x);
+            container.css("top", this.options.y);
+
             return container;
         }
     });

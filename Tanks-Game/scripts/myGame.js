@@ -74,7 +74,6 @@ $(function() {
     			 [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                  [5, 5, 5, 5, 5, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 5, 5, 5]];
      
-
 	//Adding start button
 	$("#myGame").append("<img id='startButton' src='images/start.jpg' style='width: 40px; height: 40px;' />");
 	//start button
@@ -123,15 +122,18 @@ $(function() {
 	}
 	var moveTanks = function() {
 		for (var i=0; i < tanks.length; i++) {
-			tanks[i].move();
-			tanks[i].update();
+            var movements = tryMoveObject(tanks[i], tanks[i].direction);
+            updateMovingObject(tanks[i], movements.horizontalMove. movements.verticalMove)
+			//tanks[i].move();
+			//tanks[i].update();
     	}
 	}
 	var addTanks = function() {
 		if (tanks.length < 10) {
-			var newTank = new TankObject();
-			newTank.div = gf.addSprite(container,"tank" + tanks.length, {x: 160, y: 160, width: 34, height: 34});
-			gf.setAnimation(newTank.div, tankAnim);
+			var newTank = new gameObjectsNS.GameObject("tank" + tanks.length, tankAnim,  {x: 160, y: 160});
+			//newTank.div = newTank.container;
+            console.log(newTank.container);
+			gf.setAnimation(newTank.container, tankAnim);
 			tanks.push(newTank);
 		}
 	}
