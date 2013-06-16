@@ -28,12 +28,9 @@ var gameObjectsNS = (function () {
             container.css("overflow", "hidden");
             return container;
         },
-
-        remove: function() {
-            console.log(this.id + " removed.");
+        remove: function () {
             $("#" + this.id).remove();
         },
-
         left: function (position) {
             if (position) {
                 this.container.css("left", position);
