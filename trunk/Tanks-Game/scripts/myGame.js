@@ -129,7 +129,7 @@ $(function() {
 		gf.addCallback(addTanks, 2000);
 
         gf.addCallback(moveBullets, 60);
-        gf.addCallback(shootTanks, 1500);
+        gf.addCallback(shootTanks, 1303);
 
 		$("#startButton").remove();
         container.css("display", "block");
@@ -152,7 +152,7 @@ $(function() {
     	}
 	}
 	var addTanks = function() {
-		if (tanks.length < 10) {
+		if (tanks.length < 9) {
 			var newTank = new gameObjectsNS.EnemyTank("tank" + tanks.length, tankAnim, 5, standardTankOptions);
 			//newTank.div = newTank.container;
             //console.log(newTank.container);
@@ -193,7 +193,7 @@ $(function() {
                 width: 5,
                 height: 5,
             }
-            newBullet = tanks[i].shoot("bullet" + bullets.length, bulletAnim, 15, bulletOptions, tanks[i].direction); 
+            newBullet = tanks[i].shoot("bullet" + tanks[i].id + bullets.length, bulletAnim, 15, bulletOptions, tanks[i].direction); 
             gf.setAnimation(newBullet.container, bulletAnim);
             container.append(newBullet.container);
             bullets.push(newBullet);
@@ -210,14 +210,20 @@ $(function() {
             if (!isMoved) {
                 removedBullets.push(bullets[i]);
             }
-            //tanks[i].move();
-            //tanks[i].update();
         }
 
+        
         //removed all successfulBullets
-        for (var i = 0; i < removedBullets.length; i++) {
-            bullets.splice(removedBullets[i]);
+        for (var j = 0; j < removedBullets.length; j++) {
+            for (var i = 0; i < bullets.length; i++) {
+                if (bullets[i] == removedBullets[j])
+                {
+                    bullets.splice(i, 1);
+                    break;
+                }
+            }
         };
+        
     }
 
 	var tryMoveObject = function (gameObject, direction, inputStep) {
@@ -265,7 +271,6 @@ $(function() {
         var i = 0;
         if (collisions.length > 0)
         {
-            bullets.splice(bullet, 1)
             bullet.remove();
             return false;
         }
@@ -421,32 +426,9 @@ $(function() {
 
 		moveTanks();
 
-        /*
-		var idle = true;
-        if(gf.keyboard[37] && idle){ //left arrow
-            player.left();
-            idle = false;
+        if(gf.keyboard[37]){ //left arrow
+            console.log(bullets.length);
         }
-        if(gf.keyboard[38] && idle){ //up arrow
-            player.up();
-            idle = false;
-
-        }
-        if(gf.keyboard[39] && idle){ //right arrow
-            player.right();
-            idle = false;
-        }
-        if(gf.keyboard[40] && idle){ //down arrow
-            player.down();
-            idle = false;
-        }
-        if(idle){
-            player.idle();
-        }
-        
-        player.update();
-        */
-        
 	}
 
 	var endGame = function() {
