@@ -29,6 +29,7 @@ var gameObjectsNS = (function () {
             return container;
         },
         remove: function () {
+            //console.log(this.id + " removed");
             $("#" + this.id).remove();
         },
         left: function (position) {
@@ -102,12 +103,19 @@ var gameObjectsNS = (function () {
             $super(id, animation, speed, options);
             this.isAlive = true;
             this.isMoving = false;
+            this.canShoot = true;
         },
         move: function (direction) {
             // this.topLeft.update(direction);
         },
-        shoot: function () {
-            // TODO: Implement logic to shoot!!!  // this.shouldShoot = true;
+        shoot: function (id, animation, speed, options, direction, isEnemy) {
+            if (this.canShoot) {
+                //console.log("shooted!!!!");
+                var newBullet = new Bullet(id, animation, speed, options, this.direction, false);
+
+                //this.setShootingInterval = setInterval(this._setShooting, 1000);
+                return newBullet;
+            }
         },
     });
 
@@ -136,23 +144,25 @@ var gameObjectsNS = (function () {
             }
         },
 
-        shoot: function (id, animation, speed, options, direction) {
-            var newBullet = new Bullet(id, animation, speed, options, direction);
+        shoot: function (id, animation, speed, options, direction, isEnemy) {
+            var newBullet = new Bullet(id, animation, speed, options, direction, isEnemy);
 
             return newBullet;
         }
     });
 
     var Bullet = Class.create(MovingObject, {
-        initialize: function ($super, id, animation, speed, options, direction) {
+        initialize: function ($super, id, animation, speed, options, direction, isEnemy) {
+            //console.log(direction);
             $super(id, animation, speed, options);
             this.isDestroyed = false;
             this.direction = direction;
+            this.isEnemy = isEnemy;
             // TODO: Property for shot origin!!!
         },
         move: function () {
             //this.topLeft.update(this.direction); // TODO: Reconsider!!!
-        }
+        },
     });
 
     return {
