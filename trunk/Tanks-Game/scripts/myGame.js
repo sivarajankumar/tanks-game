@@ -128,7 +128,7 @@ $(function() {
 	var moveTanks = function() {
 		for (var i=0; i < tanks.length; i++) {
             var movements = tryMoveObject(tanks[i], tanks[i].direction);
-            updateMovingObject(tanks[i], movements.horizontalMove. movements.verticalMove)
+            updateMovingObject(tanks[i], movements.horizontalMove, movements.verticalMove)
 			//tanks[i].move();
 			//tanks[i].update();
     	}
@@ -137,13 +137,15 @@ $(function() {
 		if (tanks.length < 10) {
 			var newTank = new gameObjectsNS.GameObject("tank" + tanks.length, tankAnim,  {x: 160, y: 160});
 			//newTank.div = newTank.container;
-            console.log(newTank.container);
+            //console.log(newTank.container);
 			gf.setAnimation(newTank.container, tankAnim);
+            console.log(newTank.container);
+            container.append(newTank.container);
 			tanks.push(newTank);
 		}
 	}
 
-	var tryMoveObject = function (target, direction, inputStep) {
+	var tryMoveObject = function (gameObject, direction, inputStep) {
 		var step = 5;
 		var horizontalMove = 0;
 		var verticalMove = 0;
@@ -153,22 +155,22 @@ $(function() {
 			case "left":
 				//gf.x(target.div, gf.x(target.div) - 5);
 				horizontalMove = -step;
-				gf.transform(target.div, { rotate: 0, flipH: true});
+				gf.transform(gameObject, { rotate: 0, flipH: true});
 				break;
 			case "right":
 				//gf.x(target.div, gf.x(target.div) + 5);
 				horizontalMove = step;
-    			gf.transform(target.div, { rotate: 0, flipH: false});
+    			gf.transform(gameObject, { rotate: 0, flipH: false});
     			break;
     		case "up":
     			//gf.y(target.div, gf.y(target.div) - 5);
     			verticalMove = -step;
-    			gf.transform(target.div, { rotate: -90, flipH: false});
+    			gf.transform(gameObject, { rotate: -90, flipH: false});
     			break;
 			default:
     			//gf.y(target.div, gf.y(target.div) + 5);
     			verticalMove = step;
-    			gf.transform(target.div, { rotate: 90, flipH: false});
+    			gf.transform(gameObject, { rotate: 90, flipH: false});
     			break;
 		}
 
@@ -178,16 +180,19 @@ $(function() {
 		};
 	}
 
-	var updateMovingObject = function(target, horizontalMove, verticalMove) {
-		var newY = gf.y(target.div) + verticalMove;
-            var newX = gf.x(target.div) + horizontalMove;
-            var newW = gf.width(target.div);
-            var newH = gf.height(target.div);            
+	var updateMovingObject = function(gameObject, horizontalMove, verticalMove) {
+		var newY = gf.y(gameObject) + verticalMove;
+            var newX = gf.x(gameObject) + horizontalMove;
+            var newW = gf.width(gameObject);
+            var newH = gf.height(gameObject);            
             
             var collisions = gf.tilemapCollide(tilemap, {x: newX, y: newY, width: newW, height: newH});
             var i = 0;
             while (i < collisions.length > 0) {
                 var collision = collisions[i];
+                collision.options = {x: collision.data("gf").x, y: collision.data("gf").y, width: collision.data("gf").width,
+                height: collision.data("gf").height
+                 };
                 i++;
                 var collisionBox = {
                     x1: gf.x(collision),
@@ -211,8 +216,8 @@ $(function() {
                 //collisions = gf.tilemapCollide(tilemap, {x: newX, y: newY, width: newW, height: newH});
             }
             //console.log("Mogin player to " + newX + " " + newY + " from " +  gf.x(target.div) + " " + gf.y(target.div));
-            gf.x(target.div, newX);
-            gf.y(target.div, newY);
+            gf.x(gameObject, newX);
+            gf.y(gameObject, newY);
 	}
 
 	function TankObject() {
@@ -305,6 +310,7 @@ $(function() {
 
 		moveTanks();
 
+        /*
 		var idle = true;
         if(gf.keyboard[37] && idle){ //left arrow
             player.left();
@@ -328,6 +334,7 @@ $(function() {
         }
         
         player.update();
+        */
         
 	}
 

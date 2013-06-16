@@ -16,6 +16,8 @@ var gameObjectsNS = (function () {
             this.animation = animation;
             this.options = options;
 
+            this.direction = "down";
+
             this.container = this._getContainer();
         },
         _getContainer: function () {
@@ -23,11 +25,30 @@ var gameObjectsNS = (function () {
             container = $("<div></div>");
             container.attr("id", this.id);
             container.css("width", this.options.width);
-            container.css("heigth", this.options.height);
+            container.css("height", this.options.height);
             container.css("left", this.options.x);
             container.css("top", this.options.y);
-
+            container.css("position", "absolute");
+            container.css("overflow", "hidden");
             return container;
+        },
+
+        changeDirection : function () {
+            var rndNum = Math.floor(Math.random() * 4);
+            switch (rndNum) {
+                case 0:
+                    this.direction = "left";
+                    break;
+                case 1:
+                    this.direction = "right";
+                    break;
+                case 2:
+                    this.direction = "up";
+                    break;
+                case 3:
+                    this.direction = "down";
+                    break;
+            }
         }
     });
 
