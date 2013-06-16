@@ -11,46 +11,53 @@
             margin: 0;
             padding: 0;
         }
-        #wrapper{
+
+        #wrapper {
             float: left;
             width: 680px;
             height: 510px;
             background: #123456;
             color: #ffffff;
             font-size: 30px;
-            text-align:center;
+            text-align: center;
         }
+
         #inner-text {
             padding-top: 200px;
         }
+
         a {
             display: block;
             background-image: url("images/start.png");
             width: 680px;
             height: 510px;
         }
-        a:hover {
-            background-image: url("images/start-hover.png");
+
+            a:hover {
+                background-image: url("images/start-hover.png");
+            }
+
+        #Div1 {
+            position: absolute;
+            left: 680px;
+            display: inline-block;
+            /*background:red;*/
+            height: 510px;
+            line-height: 40px;
+            font-size: 25px;
+            font-family: 'Comic Sans MS',sans-serif;
+            padding-right: 30px;
         }
-        #Div1{
-		position:absolute;
-		left:680px;
-		display:inline-block;
-		/*background:red;*/
-		height:510px;
-		line-height:40px;
-		font-size:25px;
-        font-family:'Comic Sans MS',sans-serif;
-        padding-right:30px;		
-		}
+
         ul {
             list-style-type: none;
         }
     </style>
 </head>
 <body>
-    <div id="myGame"><div id="startButton"></div></div>
-    <div id="Div1"></div>
+    <div id="myGame">
+        <div id="startButton"></div>
+    </div>
     <script src="scripts/start.js"></script>
     <script src="scripts/GameObjectsNS.js"></script>
     <script src="scripts/GameFieldNS.js"></script>
