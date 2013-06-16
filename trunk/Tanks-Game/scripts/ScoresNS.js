@@ -29,6 +29,9 @@
 
             return topScores;
         },
+        render: function () {
+          // TODO: Implement with jQuery
+        },
         _orderScores: function (firstScore, secondScore) {
             return firstScore.points - secondScore.points;
         }
