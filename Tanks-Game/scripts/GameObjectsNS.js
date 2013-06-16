@@ -5,7 +5,7 @@ var gameObjectsNS = (function () {
             this.topLeft = topLeft;
         },
         render: function () {
-            // TODO: Implement logic with[out] jQuery.
+            // TODO: Implement logic with jQuery.
         }
     });
 
@@ -146,9 +146,9 @@ var gameObjectsNS = (function () {
             return this.isDestroyed;
         },
         canCollideWith: function (otherCollisionGroupObjectString) {
-            return otherCollisionGroupObjectString == 'BrickWall'
-                || otherCollisionGroupObjectString == 'SteelWall'
-                || otherCollisionGroupObjectString == 'Player';
+            return otherCollisionGroupObjectString == 'BrickWall' ||
+                   otherCollisionGroupObjectString == 'SteelWall' ||
+                   otherCollisionGroupObjectString == 'Player';
         },
         respondToCollision: function () {
             this.Direction = new GridPosition(0, 0);
