@@ -7,8 +7,7 @@
     });
 
     var ScoreBoard = Class.create({
-        initialize: function (containerID) {
-            this.container = $(containerID);
+        initialize: function () {
             this.scores = [];
         },
         add: function (newScore) {
@@ -27,7 +26,7 @@
 
             return topScores;
         },
-        render: function () {
+        getRendered: function () {
             var topScoresList, i, topScore, topScoresCount, topScores;
             topScoresList = $("<ul></ul>");
             topScores = this._getTopScores();
@@ -38,7 +37,7 @@
                 topScoresList.append(topScore);
             }
 
-            this.container.append(topScoresList);
+            return topScoresList;
         },
         _orderScores: function (firstScore, secondScore) {
             return secondScore.points - firstScore.points;

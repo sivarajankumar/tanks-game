@@ -84,7 +84,7 @@ $(function () {
                  [5, 5, 5, 5, 5, 6, 6, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 5, 5, 5]];
 
     var container, tilemap;
-    var player = new gameObjectsNS.PlayerTank("player-tank", playerAnimation, 5, { x: 600, y: 60 });
+    var player = new gameObjectsNS.PlayerTank("player-tank", playerAnimation, 50, { x: 600, y: 60 });
 
     $("#startButton").click(function () {
         engine.startGame(initialize);
@@ -102,11 +102,8 @@ $(function () {
         engine.setAnimation(player.container, playerAnimation.stand);
 
         engine.addCallback(gameLoop, 100);
-
         engine.addCallback(changeDirections, 600);
-
         engine.addCallback(addTanks, 2000);
-
         engine.addCallback(moveBullets, 60);
         engine.addCallback(shootTanks, 1303);
 
@@ -242,7 +239,6 @@ $(function () {
         var newH = engine.height(bullet);
 
         var collisions = engine.tilemapCollide(tilemap, { x: newX, y: newY, width: newW, height: newH });
-        var i = 0;
         if (collisions.length > 0) {
             bullet.remove();
             return false;
@@ -356,6 +352,60 @@ $(function () {
 
     var endGame = function () {
         player.canShoot = false;
+        player.options.x = 680;
+
+        var endGameContainer = $("#endGameContainer");
+        endGameContainer.css("display", "block");
+
+        addTwitterFunctionality(endGameContainer);
+        addViewScoreBoardFunctionality(endGameContainer);
+    }
+
+    function addViewScoreBoardFunctionality(endGameContainer) {
+        var scoreBoardContainer = $("<div></div>");
+        var scoreBoardForm = $("<form></form>");
+        scoreBoardForm.append("<label for='user-name'>Enter your name: </label>");
+        scoreBoardForm.append("<input type='text' id='user-name'/>");
+        scoreBoardForm.append(($("<input type='submit' value='Submit' />").click(function () {
+            var playerName = $('#user-name').val();
+            localStorage.setItem(playerName, playerPoints);
+        })));
+
+        scoreBoardContainer.append(scoreBoardForm);
+        var topScoresContainer = $("<div></div>");
+        var topScoresButton = $("<button id='scores-button'>View top scores</button>");
+        topScoresButton.click(function () {
+            topScoresContainer.html("");
+            var scoreBoard = new scoresNS.ScoreBoard();
+            for (var i = 0, scoresCount = localStorage.length; i < scoresCount; i++) {
+                var key = localStorage.key(i);
+                var newScore = new scoresNS.Score(key, localStorage.getItem(key));
+                scoreBoard.add(newScore);
+            }
+
+            topScoresContainer.append(scoreBoard.getRendered());
+            scoreBoardContainer.append(topScoresContainer);;
+        });
+
+        scoreBoardContainer.append(topScoresButton);
+        endGameContainer.append(scoreBoardContainer);
+    }
+
+    function addTwitterFunctionality(endGameContainer) {
+        var twitterContainer = $("<div></div>");
+        twitterContainer.html('<iframe id="tweet-button" allowtransparency="true" frameborder="0" scrolling="no" \
+        src="http://platform.twitter.com/widgets/tweet_button.html?via=DragonFruitTeam&amp;text=Tweet%20Your%20Score:&amp;count=horizontal"; \
+        style="width: 110px; height: 20px;"></iframe>');
+        endGameContainer.append(twitterContainer);
+
+        function tweet(message) {
+            var tweetButton = $('#tweet-button');
+            var account = 'DragonFruitTeam';
+            var text = message.replace(/ /g, "%20");
+            var tButtonSrc = 'http://platform.twitter.com/widgets/tweet_button.html?via=' + account + '&text=' + text + '&count=horizontal';
+            tweetButton.attr("src", tButtonSrc);
+        };
+
+        tweet("Great game! My points are: " + playerPoints);
     }
 })
-
