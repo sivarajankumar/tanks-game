@@ -7,18 +7,16 @@
     });
 
     var ScoreBoard = Class.create({
-        initialize: function (container, width, height) {
-            this.container = container;
-            this.width = width;
-            this.height = height;
+        initialize: function (containerID) {
+            this.container = $(containerID);
             this.scores = [];
         },
         add: function (newScore) {
             this.scores.push(newScore);
         },
-        getTopScores: function () {
+        _getTopScores: function () {
             var topScores, i;
-            this.scores.orderBy(this._orderScores);
+            this.scores.sort(this._orderScores);
 
             topScores = [];
             i = 0;
@@ -29,8 +27,21 @@
 
             return topScores;
         },
+        render: function () {
+            var topScoresList, i, topScore, topScoresCount, topScores;
+            topScoresList = $("<ul></ul>");
+            topScores = this._getTopScores();
+            topScoresCount = topScores.length;
+            for (i = 0; i < topScoresCount; i++) {
+                topScore = $("<li></li>");
+                topScore.html("" + (i + 1) + ". " + topScores[i].name + " - " + topScores[i].points);
+                topScoresList.append(topScore);
+            }
+
+            this.container.append(topScoresList);
+        },
         _orderScores: function (firstScore, secondScore) {
-            return firstScore.points - secondScore.points;
+            return secondScore.points - firstScore.points;
         }
     });
 
