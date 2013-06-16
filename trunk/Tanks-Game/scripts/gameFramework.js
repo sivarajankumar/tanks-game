@@ -221,9 +221,9 @@ gf.tilemapCollide = function (tilemap, box) {
     return divs;
 }
 
-gf.spriteCollide = function (sprite1, sprite2) {
-    var option1 = sprite1.data("gf");
-    var option2 = sprite2.data("gf");
+gf.objectCollide = function (gameObject1, gameObject2) {
+    var option1 = gameObject1.options;
+    var option2 = gameObject2.options;
 
     var x = gf.intersect(
         option1.x,

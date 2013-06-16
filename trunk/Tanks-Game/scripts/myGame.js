@@ -101,7 +101,7 @@ $(function () {
         group = gf.addGroup(container, "group");
         tilemap = gf.addTilemap(group, "level", { tileWidth: 34, tileHeight: 34, width: 20, height: 15, map: level, animations: tiles });
 
-        player.container = gf.addSprite(container, "player", { x: 600, y: 60, width: 34, height: 34 });
+        player.container = gf.addSprite(container, "player-tank", { x: 600, y: 60, width: 34, height: 34 });
 
         gf.setAnimation(player.container, playerAnim.stand);
 
@@ -133,7 +133,7 @@ $(function () {
         }
     }
     var addTanks = function () {
-        if (tanks.length < 9) {
+        if (tanks.length < 1) {
             var newTank = new gameObjectsNS.EnemyTank("tank" + tanks.length, tankAnim, 5, standardTankOptions);
             gf.setAnimation(newTank.container, tankAnim);
             container.append(newTank.container);
@@ -144,38 +144,47 @@ $(function () {
     var shootTanks = function () {
         var newBullet;
         for (var i = 0; i < tanks.length; i++) {
-            var posX;
-            var posY;
-            switch (tanks[i].direction) {
-                case "left":
-                    posX = tanks[i].options.x;
-                    posY = tanks[i].options.y + 10;;
-                    break;
-                case "right":
-                    posX = tanks[i].options.x + tanks[i].options.width;
-                    posY = tanks[i].options.y + 10;
-                    break;
-                case "up":
-                    posX = tanks[i].options.x + 10;
-                    posY = tanks[i].options.y;
-                    break;
-                default:
-                    posX = tanks[i].options.x + 10;
-                    posY = tanks[i].options.y + tanks[i].options.height;
-                    break;
-            }
+            createBullet(tanks[i], true);
+        }
+    }
 
-            var bulletOptions = {
-                x: posX,
-                y: posY,
-                width: 5,
-                height: 5,
-            }
-            newBullet = tanks[i].shoot("bullet" + tanks[i].id + bullets.length, bulletAnim, 15, bulletOptions, tanks[i].direction);
+    var createBullet = function (shootingObject, isEnemy) {
+        console.log(shootingObject.options.direction);
+        var posX;
+        var posY;
+        switch (shootingObject.direction) {
+            case "left":
+                posX = shootingObject.options.x;
+                posY = shootingObject.options.y + 10;;
+                break;
+            case "right":
+                posX = shootingObject.options.x + shootingObject.options.width;
+                posY = shootingObject.options.y + 10;
+                break;
+            case "up":
+                posX = shootingObject.options.x + 10;
+                posY = shootingObject.options.y;
+                break;
+            default:
+                posX = shootingObject.options.x + 10;
+                posY = shootingObject.options.y + shootingObject.options.height;
+                break;
+        }
+
+        var bulletOptions = {
+            x: posX,
+            y: posY,
+            width: 5,
+            height: 5,
+        }
+        console.log(shootingObject.id + " " + shootingObject.direction);
+        newBullet = shootingObject.shoot("bullet" + shootingObject.id + bullets.length, bulletAnim, 15,
+         bulletOptions, shootingObject.direction, isEnemy);
+        if (newBullet) {
             gf.setAnimation(newBullet.container, bulletAnim);
             container.append(newBullet.container);
             bullets.push(newBullet);
-        }
+        } 
     }
 
     var moveBullets = function () {
@@ -244,6 +253,25 @@ $(function () {
             return false;
         }
 
+        if (bullet.isEnemy) {
+            if (gf.objectCollide(bullet, player)) {
+                player.remove();
+                bullet.remove();
+                endGame();
+                return false;
+            }
+        }
+        else {
+            for (var i = 0; i < tanks.length; i++) {
+                if (gf.objectCollide(tanks[i], bullet)) {
+                    tanks[i].remove();
+                    bullet.remove();
+                    tanks.splice(i, 1);
+                    return false;
+                }
+            }
+        }
+
         gf.x(bullet, newX);
         gf.y(bullet, newY);
         return true;
@@ -308,13 +336,21 @@ $(function () {
 
         var newPosition;
         if (gf.keyboard[37]) {
+            player.direction = "left";
             newPosition = tryMoveObject(player, "left", player.speed);
         } else if (gf.keyboard[38]) {
+            player.direction = "up";
             newPosition = tryMoveObject(player, "up", player.speed);
         } else if (gf.keyboard[39]) {
+            player.direction = "right";
             newPosition = tryMoveObject(player, "right", player.speed);
         } else if (gf.keyboard[40]) {
+            player.direction = "down";
             newPosition = tryMoveObject(player, "down", player.speed);
+        }
+
+        if (gf.keyboard[32]) {
+            createBullet(player, false);
         }
 
         if (newPosition) {
@@ -323,9 +359,10 @@ $(function () {
     }
 
     var endGame = function () {
-        gf.removeCallback(gameLoop);
+        //gf.removeCallback(gameLoop);
 
-        $("#container").css('display', 'none');
+        //$("#container").css('display', 'none');
+        player.canShoot = false;
     }
 
     //Killing he player on crash
