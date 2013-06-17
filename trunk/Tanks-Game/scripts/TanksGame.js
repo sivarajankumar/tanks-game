@@ -66,7 +66,7 @@ $(function () {
     }
 
     var standardTankOptionsRight = {
-        x: 640,
+        x: 600,
         y: 34,
         width: 34,
         height: 34,
