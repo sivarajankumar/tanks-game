@@ -138,7 +138,7 @@ $(function () {
 
         engine.addCallback(gameLoop, 100);
         engine.addCallback(changeDirections, 600);
-        engine.addCallback(addTanks, 2000);
+        engine.addCallback(addTanks, 3000);
         engine.addCallback(moveBullets, 60);
         engine.addCallback(shootTanks, 1303);
 
