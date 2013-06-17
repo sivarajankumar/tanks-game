@@ -57,7 +57,6 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="example.html" />
     <Content Include="scripts\FieldPosition.js" />
     <Content Include="scripts\GameEngine.js" />
     <Content Include="scripts\GameObjectsNS.js" />
@@ -73,6 +72,7 @@
     <Content Include="scripts\tests\GameFieldNSTest.js" />
     <Content Include="scripts\tests\GameObjectsNSTests.js" />
     <Content Include="scripts\tests\ScoresNSTest.js" />
+    <Content Include="test.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

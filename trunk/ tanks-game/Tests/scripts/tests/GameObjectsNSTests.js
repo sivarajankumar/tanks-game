@@ -1,8 +1,5 @@
-﻿
-module("Test GameObject class ", {
-    setup: function () {
-       
-       
+﻿module("Test GameObject class ", {
+    setup: function () {   
         var options = $.extend({
             x: 0,
             y: 0,
@@ -37,7 +34,7 @@ test("When GameObject  is initialized set correct values", function () {
     var id = "testID"
     deepEqual(id, this.test.id, "Property id set successfully");
     deepEqual(animation, this.test.animation, "Property animation set successfully");
-    deepEqual(options, this.test.options, "Property topLeft set successfully");
+    deepEqual(options, this.test.options, "Property options set successfully");
 });
 
 module("Test StaticObject class ", {
@@ -74,9 +71,8 @@ test("When Staticbject  is initialized set correct values", function () {
     var id = "testID"
     deepEqual(id, this.test.id, "Property id set successfully");
     deepEqual(animation, this.test.animation, "Property animation set successfully");
-    deepEqual(options, this.test.options, "Property topLeft set successfully");
+    deepEqual(options, this.test.options, "Property options set successfully");
 });
-
 
 module("Test MovingObject class ", {
     setup: function () {
@@ -91,15 +87,12 @@ module("Test MovingObject class ", {
             rotate: 0,
             scale: 1
         }, options);
-    
-        this.test = new gameObjectsNS.MovingObject("testID", animation,100,options);
-       
+         this.test = new gameObjectsNS.MovingObject("testID", animation,100,options); 
     }, teardown: function () {
         delete this.test;
     }
 });
 test("When MovingObject  is initialized set correct values", function () {
-
 
     var animation = "animation";
     var speed = 100;
@@ -115,14 +108,11 @@ test("When MovingObject  is initialized set correct values", function () {
         scale: 1
     }, options);
 
-  
     deepEqual(id, this.test.id, "Property id set successfully");
     deepEqual(animation, this.test.animation, "Property animation set successfully");
     deepEqual(speed, this.test.speed, "Property speed set successfully");
     deepEqual(options, this.test.options, "Property options set successfully");
-
 });
-
 
 module("Test BrickWall class ", {
     setup: function () {
@@ -139,7 +129,7 @@ module("Test BrickWall class ", {
         }, options);
         this.test = new gameObjectsNS.BrickWall("testID", animation, options);
     }, teardown: function () {
-
+        delete this.test;
     }
 });
 test("When BrickWall  is initialized set correct values", function () {
@@ -159,7 +149,7 @@ test("When BrickWall  is initialized set correct values", function () {
     var id = "testID"
     deepEqual(id, this.test.id, "Property id set successfully");
     deepEqual(animation, this.test.animation, "Property animation set successfully");
-    deepEqual(options, this.test.options, "Property topLeft set successfully");
+    deepEqual(options, this.test.options, "Property options set successfully");
     equal(isDestroyed, this.test.isDestroyed, "Property isDesroyed set correctly");
 });
 
@@ -198,10 +188,8 @@ test("When SteelWall  is initialized set correct values", function () {
     var id = "testID"
     deepEqual(id, this.test.id, "Property id set successfully");
     deepEqual(animation, this.test.animation, "Property animation set successfully");
-    deepEqual(options, this.test.options, "Property topLeft set successfully");
-   
+    deepEqual(options, this.test.options, "Property options set successfully");
 });
-
 
 module("Test PlayerTank class ", {
     setup: function () {
@@ -216,15 +204,12 @@ module("Test PlayerTank class ", {
             rotate: 0,
             scale: 1
         }, options);
-
         this.test = new gameObjectsNS.PlayerTank("testID", animation, 100, options);
-
     }, teardown: function () {
         delete this.test;
     }
 });
 test("When PlayerTank  is initialized set correct values", function () {
-
     var animation = "animation";
     var speed = 100;
     var id = "testID";
@@ -242,14 +227,13 @@ test("When PlayerTank  is initialized set correct values", function () {
         scale: 1
     }, options);
 
-
     deepEqual(id, this.test.id, "Property id set successfully");
     deepEqual(animation, this.test.animation, "Property animation set successfully");
     deepEqual(speed, this.test.speed, "Property speed set successfully");
     deepEqual(options, this.test.options, "Property options set successfully");
-    deepEqual(isAlive, this.test.isAlive, "Property options set successfully");
-    deepEqual(isMoving, this.test.isMoving, "Success");
-    deepEqual(canShoot, this.test.canShoot, "Success");
+    deepEqual(isAlive, this.test.isAlive, "Property isAlive set successfully");
+    deepEqual(isMoving, this.test.isMoving, "Property isMoving set successfully");
+    deepEqual(canShoot, this.test.canShoot, "Property canShoot set successfully");
 });
 
 test("When PlayerTank  shoot", function () {
@@ -271,15 +255,11 @@ test("When PlayerTank  shoot", function () {
         rotate: 0,
         scale: 1
     }, options);
-
-
     var x = this.test.shoot(id, animation, speed, options, this.direction, false);
    //var t= x.shoot(id, animation, speed, options, direction, true);
     var bulet = new gameObjectsNS.Bullet(id, animation, speed, options,this.direction,false);
     deepEqual(bulet, x);
 });
-
-
 
 module("Test EnemyTank class ", {
     setup: function () {
@@ -294,9 +274,7 @@ module("Test EnemyTank class ", {
             rotate: 0,
             scale: 1
         }, options);
-
         this.test = new gameObjectsNS.PlayerTank("testID", animation, 100, options);
-
     }, teardown: function () {
         delete this.test;
     }
@@ -320,14 +298,13 @@ test("When EnemyTank  is initialized set correct values", function () {
         scale: 1
     }, options);
 
-
     deepEqual(id, this.test.id, "Property id set successfully");
     deepEqual(animation, this.test.animation, "Property animation set successfully");
     deepEqual(speed, this.test.speed, "Property speed set successfully");
     deepEqual(options, this.test.options, "Property options set successfully");
-    deepEqual(isAlive, this.test.isAlive, "Property options set successfully");
-    deepEqual(isMoving, this.test.isMoving, "Success");
-    deepEqual(canShoot, this.test.canShoot, "Success");
+    deepEqual(isAlive, this.test.isAlive, "Property isAlive set successfully");
+    deepEqual(isMoving, this.test.isMoving, "Property isMoving set successfully");
+    deepEqual(canShoot, this.test.canShoot, "Property canShoot set successfully");
 });
 
 test("When EnemyTank  shoot", function () {
@@ -350,11 +327,11 @@ test("When EnemyTank  shoot", function () {
         scale: 1
     }, options);
 
-
     var x = this.test.shoot(id, animation, speed, options, this.direction, false);
     var bulet = new gameObjectsNS.Bullet(id, animation, speed, options, this.direction, false);
     deepEqual(bulet, x);
 });
+
 module("Test Bullet class ", {
     setup: function () {
         var animation = "animation";
@@ -376,8 +353,6 @@ module("Test Bullet class ", {
     }
 });
 test("When Bullet  is initialized set correct values", function () {
-
-
     var animation = "animation";
     var speed = 100;
     var id = "testID";
@@ -393,11 +368,10 @@ test("When Bullet  is initialized set correct values", function () {
         scale: 1
     }, options);
 
-
     deepEqual(id, this.test.id, "Property id set successfully");
     deepEqual(animation, this.test.animation, "Property animation set successfully");
     deepEqual(speed, this.test.speed, "Property speed set successfully");
     deepEqual(options, this.test.options, "Property options set successfully");
-    deepEqual(isDestroyed, this.test.isDestroyed, "Property options set successfully");
+    deepEqual(isDestroyed, this.test.isDestroyed, "Property isDestroyed set successfully");
 
 });
