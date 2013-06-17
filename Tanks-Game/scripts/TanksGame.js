@@ -103,19 +103,19 @@ $(function () {
     ];
 
     var level = [[6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
-                 [6, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6],
-                 [6, 0, 0, 1, 1, 1, 0, 0, 0, 6, 0, 0, 0, 2, 2, 2, 0, 0, 0, 6],
+                 [6, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2, 0, 0, 0, 0, 0, 0, 0, 0, 6],
+                 [6, 0, 0, 1, 1, 1, 0, 0, 0, 6, 2, 0, 0, 2, 2, 2, 0, 0, 0, 6],
                  [6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6],
-                 [6, 0, 2, 0, 2, 0, 0, 0, 1, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 6],
-                 [6, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 6],
-                 [6, 0, 2, 0, 2, 0, 6, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 6],
-                 [6, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 6],
-                 [6, 0, 1, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6],
-                 [6, 0, 1, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 6],
-                 [6, 0, 1, 0, 2, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 6],
-                 [6, 0, 1, 0, 0, 0, 6, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1, 0, 6],
-                 [6, 0, 1, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6],
-                 [6, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6],
+                 [6, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 6],
+                 [6, 0, 0, 0, 0, 0, 0, 6, 6, 6, 6, 6, 6, 0, 0, 0, 0, 0, 0, 6],
+                 [6, 0, 2, 0, 2, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 1, 0, 1, 0, 6],
+                 [6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6],
+                 [6, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6],
+                 [6, 0, 1, 0, 6, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 6],
+                 [6, 0, 1, 0, 6, 0, 0, 2, 1, 1, 1, 1, 2, 0, 0, 0, 0, 6, 0, 6],
+                 [6, 0, 1, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 6, 6, 0, 6],
+                 [6, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6],
+                 [6, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 6],
                  [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]];
 
     var container, tilemap;
@@ -156,18 +156,17 @@ $(function () {
 
     var moveTanks = function () {
         for (var i = 0; i < tanks.length; i++) {
-            var movements = tryMoveObject(tanks[i], tanks[i].direction);
-            updateMovingObject(tanks[i], movements.horizontalMove, movements.verticalMove)
+            var movements = rotateAndGetNextPos(tanks[i], tanks[i].direction, tanks[i].speed);
+            moveObject(tanks[i], movements.horizontalMove, movements.verticalMove)
         }
     }
 
+    //Create random tanks
     var addTanks = function () {
         if (tanks.length < 14) {
 
             var typeOfTankLeft = generateTypeOfTank();
-
-
-            var newTank = new gameObjectsNS.EnemyTank("tank" + tanks.length, typeOfTankLeft.animation, 5, 
+            var newTank = new gameObjectsNS.EnemyTank("tank" + tanks.length, typeOfTankLeft.animation, typeOfTankLeft.speed, 
                                                         standardTankOptionsLeft, typeOfTankLeft.points);
             engine.setAnimation(newTank.container, typeOfTankLeft.animation);
 
@@ -175,16 +174,15 @@ $(function () {
             tanks.push(newTank);
 
             var typeOfTankRight = generateTypeOfTank();
-            var anotherTank = new gameObjectsNS.EnemyTank("tank" + tanks.length, typeOfTankRight.animation, 5, 
+            var anotherTank = new gameObjectsNS.EnemyTank("tank" + tanks.length, typeOfTankRight.animation, typeOfTankRight.speed, 
                                                             standardTankOptionsRight, typeOfTankRight.points);
-            var randomNumber = (Math.random() * 3) | 0;
             engine.setAnimation(anotherTank.container, typeOfTankRight.animation);
 
             container.append(anotherTank.container);
             tanks.push(anotherTank);
         }
     }
-
+    
     var generateTypeOfTank = function () {
         var typeOfTank = {};
         var randomNumber = (Math.random() * 5) | 0;
@@ -192,21 +190,26 @@ $(function () {
             case 0:
                 typeOfTank.animation = tankAnimSmall;
                 typeOfTank.points = 10;
+                typeOfTank.speed = 5;
                 break;
             case 1:
                 typeOfTank.animation = tankAnimBig;
                 typeOfTank.points = 20;
+                typeOfTank.speed = 5;
                 break;
             case 2:
                 typeOfTank.animation = tankAnimBigger;
+                typeOfTank.speed = 5;
                 typeOfTank.points = 30;
                 break;
             case 3:
                 typeOfTank.animation = tankAnimBigSpecial;
+                typeOfTank.speed = 10;
                 typeOfTank.points = 40;
                 break;
             case 4:
                 typeOfTank.animation = tankAnimBiggerSpecial;
+                typeOfTank.speed = 5;
                 typeOfTank.points = 50;
                 break;
         }
@@ -253,7 +256,7 @@ $(function () {
             bulletOptions, shootingObject.direction, isEnemy);
         if (newBullet) {
             engine.setAnimation(newBullet.container, bulletAnimation);
-            tryMoveObject(newBullet, newBullet.direction, 0);
+            rotateAndGetNextPos(newBullet, newBullet.direction, 0);
             container.append(newBullet.container);
             bullets.push(newBullet);
         }
@@ -264,8 +267,8 @@ $(function () {
         var movements;
         var isMoved;
         for (var i = 0; i < bullets.length; i++) {
-            movements = tryMoveObject(bullets[i], bullets[i].direction, bullets[i].speed);
-            isMoved = updateBullet(bullets[i], movements.horizontalMove, movements.verticalMove);
+            movements = rotateAndGetNextPos(bullets[i], bullets[i].direction, bullets[i].speed);
+            isMoved = moveBullet(bullets[i], movements.horizontalMove, movements.verticalMove);
             if (!isMoved) {
                 removedBullets.push(bullets[i]);
             }
@@ -281,7 +284,7 @@ $(function () {
         }
     }
 
-    var tryMoveObject = function (gameObject, direction, inputStep) {
+    var rotateAndGetNextPos = function (gameObject, direction, inputStep) {
         var step = 5;
         var horizontalMove = 0;
         var verticalMove = 0;
@@ -312,7 +315,7 @@ $(function () {
         }
     }
 
-    var updateBullet = function (bullet, horizontalMove, verticalMove) {
+    var moveBullet = function (bullet, horizontalMove, verticalMove) {
         var newY = engine.y(bullet) + verticalMove;
         var newX = engine.x(bullet) + horizontalMove;
         var newW = engine.width(bullet);
@@ -352,7 +355,7 @@ $(function () {
         return true;
     }
 
-    var updateMovingObject = function (gameObject, horizontalMove, verticalMove) {
+    var moveObject = function (gameObject, horizontalMove, verticalMove) {
         var newY = engine.y(gameObject) + verticalMove;
         var newX = engine.x(gameObject) + horizontalMove;
         var newW = engine.width(gameObject);
@@ -437,7 +440,7 @@ $(function () {
 
         if (moving) {
             engine.setAnimation(player.container, playerAnimation.move);
-            newPosition = tryMoveObject(player, player.direction, player.speed);
+            newPosition = rotateAndGetNextPos(player, player.direction, player.speed);
         }  else {
             engine.setAnimation(player.container, playerAnimation.stand);
         }
@@ -455,7 +458,7 @@ $(function () {
 
         //set player next pos
         if (newPosition) {
-            updateMovingObject(player, newPosition.horizontalMove, newPosition.verticalMove);
+            moveObject(player, newPosition.horizontalMove, newPosition.verticalMove);
         }
     }
 
