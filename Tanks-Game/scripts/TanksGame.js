@@ -8,25 +8,39 @@ $(function () {
         width: 34,
     })
 
-     var tankAnimBig = new engine.animation({
+    var tankAnimBig = new engine.animation({
         url: "images/tank2.png",
         numberOfFrames: 2,
         rate: 200,
         width: 34,
     })
 
-      var tankAnimBigger = new engine.animation({
+    var tankAnimBigger = new engine.animation({
         url: "images/tank3.png",
         numberOfFrames: 2,
         rate: 200,
         width: 34,
     })
 
+    var tankAnimBigSpecial = new engine.animation({
+        url: "images/tanksBigSpecial.png",
+        numberOfFrames: 2,
+        rate: 200,
+        width: 34,
+    })
+
+    var tankAnimBiggerSpecial = new engine.animation({
+        url: "images/tanksBiggerSpecial.png",
+        numberOfFrames: 2,
+        rate: 200,
+        width: 34,
+    })
+
     var bulletAnimation = new engine.animation({
-        url: "images/button.png",
+        url: "images/bullet.png",
         numberOfFrames: 1,
         rate: 200,
-        width: 10,
+        width: 7,
     })
 
     var playerAnimation = {
@@ -44,9 +58,16 @@ $(function () {
         })
     };
 
-    var standardTankOptions = {
-        x: 334,
-        y: 334,
+    var standardTankOptionsLeft = {
+        x: 34,
+        y: 34,
+        width: 34,
+        height: 34,
+    }
+
+    var standardTankOptionsRight = {
+        x: 640,
+        y: 34,
         width: 34,
         height: 34,
     }
@@ -98,7 +119,7 @@ $(function () {
                  [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]];
 
     var container, tilemap;
-    var player = new gameObjectsNS.PlayerTank("player-tank", playerAnimation, 50, { x: 600, y: 60 });
+    var player = new gameObjectsNS.PlayerTank("player-tank", playerAnimation, 10, { x: 340, y: 440 });
 
     $("#startButton").click(function () {
         engine.startGame(initialize);
@@ -111,7 +132,7 @@ $(function () {
         group = engine.addGroup(container, "group");
         tilemap = engine.addTilemap(group, "level", { tileWidth: 34, tileHeight: 34, width: 20, height: 15, map: level, animations: tiles });
 
-        player.container = engine.addSprite(container, "player-tank", { x: 600, y: 60, width: 34, height: 34 });
+        player.container = engine.addSprite(container, "player-tank", { x: 340, y: 440, width: 34, height: 34 });
 
         engine.setAnimation(player.container, playerAnimation.stand);
 
@@ -129,7 +150,7 @@ $(function () {
     var bullets = [];
     var changeDirections = function () {
         for (var i = 0; i < tanks.length; i++) {
-            tanks[i].changeDirection();
+            tanks[i].changeDirection(player.options.x, player.options.y);
         }
     }
 
@@ -141,23 +162,56 @@ $(function () {
     }
 
     var addTanks = function () {
-        if (tanks.length < 10) {
-            var newTank = new gameObjectsNS.EnemyTank("tank" + tanks.length, tankAnimSmall, 5, standardTankOptions);
-            var randomNumber = (Math.random() * 3) | 0;
-            switch (randomNumber) {
-                case 0:
-                    engine.setAnimation(newTank.container, tankAnimSmall);
-                    break;
-                case 1:
-                    engine.setAnimation(newTank.container, tankAnimBig);
-                    break;
-                case 2:
-                    engine.setAnimation(newTank.container, tankAnimBigger);
-                    break;
-            }
+        if (tanks.length < 9) {
+
+            var typeOfTankLeft = generateTypeOfTank();
+
+
+            var newTank = new gameObjectsNS.EnemyTank("tank" + tanks.length, typeOfTankLeft.animation, 5, 
+                                                        standardTankOptionsLeft, typeOfTankLeft.points);
+            engine.setAnimation(newTank.container, typeOfTankLeft.animation);
+
             container.append(newTank.container);
             tanks.push(newTank);
+
+            var typeOfTankRight = generateTypeOfTank();
+            var anotherTank = new gameObjectsNS.EnemyTank("tank" + tanks.length, typeOfTankRight.animation, 5, 
+                                                            standardTankOptionsRight, typeOfTankRight.points);
+            var randomNumber = (Math.random() * 3) | 0;
+            engine.setAnimation(anotherTank.container, typeOfTankRight.animation);
+
+            container.append(anotherTank.container);
+            tanks.push(anotherTank);
         }
+    }
+
+    var generateTypeOfTank = function () {
+        var typeOfTank = {};
+        var randomNumber = (Math.random() * 5) | 0;
+        switch (randomNumber) {
+            case 0:
+                typeOfTank.animation = tankAnimSmall;
+                typeOfTank.points = 10;
+                break;
+            case 1:
+                typeOfTank.animation = tankAnimBig;
+                typeOfTank.points = 20;
+                break;
+            case 2:
+                typeOfTank.animation = tankAnimBigger;
+                typeOfTank.points = 30;
+                break;
+            case 3:
+                typeOfTank.animation = tankAnimBigSpecial;
+                typeOfTank.points = 40;
+                break;
+            case 4:
+                typeOfTank.animation = tankAnimBiggerSpecial;
+                typeOfTank.points = 50;
+                break;
+        }
+
+        return typeOfTank;
     }
 
     var shootTanks = function () {
@@ -172,18 +226,18 @@ $(function () {
         switch (shootingObject.direction) {
             case "left":
                 posX = shootingObject.options.x;
-                posY = shootingObject.options.y + 10;;
+                posY = shootingObject.options.y + 15;;
                 break;
             case "right":
                 posX = shootingObject.options.x + shootingObject.options.width;
-                posY = shootingObject.options.y + 10;
+                posY = shootingObject.options.y + 15;
                 break;
             case "up":
-                posX = shootingObject.options.x + 10;
+                posX = shootingObject.options.x + 15;
                 posY = shootingObject.options.y;
                 break;
             default:
-                posX = shootingObject.options.x + 10;
+                posX = shootingObject.options.x + 15;
                 posY = shootingObject.options.y + shootingObject.options.height;
                 break;
         }
@@ -191,14 +245,15 @@ $(function () {
         var bulletOptions = {
             x: posX,
             y: posY,
-            width: 5,
-            height: 5,
+            width: 4,
+            height: 4,
         }
 
         newBullet = shootingObject.shoot("bullet" + shootingObject.id + bullets.length, bulletAnimation, 15,
             bulletOptions, shootingObject.direction, isEnemy);
         if (newBullet) {
             engine.setAnimation(newBullet.container, bulletAnimation);
+            tryMoveObject(newBullet, newBullet.direction, 0);
             container.append(newBullet.container);
             bullets.push(newBullet);
         }
@@ -265,14 +320,14 @@ $(function () {
 
         var collisions = engine.tilemapCollide(tilemap, { x: newX, y: newY, width: newW, height: newH });
         if (collisions.length > 0) {
-            bullet.remove();
+            removeGameObject(bullet);
             return false;
         }
 
         if (bullet.isEnemy) {
             if (engine.objectCollide(bullet, player)) {
-                player.remove();
-                bullet.remove();
+                removeGameObject(player);
+                removeGameObject(bullet);
                 endGame();
                 return false;
             }
@@ -280,11 +335,12 @@ $(function () {
         else {
             for (var i = 0; i < tanks.length; i++) {
                 if (engine.objectCollide(tanks[i], bullet)) {
-                    tanks[i].remove();
-                    bullet.remove();
+                    removeGameObject(tanks[i]);
+                    removeGameObject(bullet);
+                    
+                    //update Score
+                    playerPoints += tanks[i].points;
                     tanks.splice(i, 1);
-
-                    playerPoints += 10;
                     return false;
                 }
             }
@@ -301,7 +357,10 @@ $(function () {
         var newW = engine.width(gameObject);
         var newH = engine.height(gameObject);
 
-        var collisions = engine.tilemapCollide(tilemap, { x: newX, y: newY, width: newW, height: newH });
+        var collisionObject =  { x: newX, y: newY, width: newW, height: newH };
+
+        var collisions = engine.tilemapCollide(tilemap, collisionObject);
+
         var i = 0;
         while (i < collisions.length > 0) {
             var collision = collisions[i];
@@ -348,34 +407,59 @@ $(function () {
         engine.y(gameObject, newY);
     }
 
+    var removeGameObject = function (gameObject) {
+        gameObject.remove();
+        engine.removeAnimation(gameObject.container);
+    }
+
+    var lastPlayerShoot = 0;
     var gameLoop = function () {
+        //move all the tanks
         moveTanks();
 
+        //get player next pos
         var newPosition;
+        var moving = false;
         if (engine.keyboard[37]) {
+            moving = true;
             player.direction = "left";
-            newPosition = tryMoveObject(player, "left", player.speed);
         } else if (engine.keyboard[38]) {
+            moving = true;
             player.direction = "up";
-            newPosition = tryMoveObject(player, "up", player.speed);
         } else if (engine.keyboard[39]) {
+            moving = true;
             player.direction = "right";
-            newPosition = tryMoveObject(player, "right", player.speed);
         } else if (engine.keyboard[40]) {
+            moving = true;
             player.direction = "down";
-            newPosition = tryMoveObject(player, "down", player.speed);
         }
 
-        if (engine.keyboard[32]) {
+        if (moving) {
+            engine.setAnimation(player.container, playerAnimation.move);
+            newPosition = tryMoveObject(player, player.direction, player.speed);
+        }  else {
+            engine.setAnimation(player.container, playerAnimation.stand);
+        }
+
+        //update the last time the player shoot
+        if (lastPlayerShoot > 0) {
+            lastPlayerShoot--;
+        }
+
+        //player shoots
+        if (engine.keyboard[32] && lastPlayerShoot === 0) {
+            lastPlayerShoot = 5;
             createBullet(player, false);
         }
 
+        //set player next pos
         if (newPosition) {
             updateMovingObject(player, newPosition.horizontalMove, newPosition.verticalMove);
         }
     }
 
     var endGame = function () {
+        engine.removeCallback(shootTanks);
         player.canShoot = false;
         player.options.x = 680;
 

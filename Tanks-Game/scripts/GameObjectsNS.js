@@ -100,6 +100,7 @@ var gameObjectsNS = (function () {
             this.isAlive = true;
             this.isMoving = false;
             this.canShoot = true;
+            this.direction = "right";
         },
         shoot: function (id, animation, speed, options, direction, isEnemy) {
             if (this.canShoot) {
@@ -110,12 +111,36 @@ var gameObjectsNS = (function () {
     });
 
     var EnemyTank = Class.create(MovingObject, {
-        initialize: function ($super, id, animation, speed, options) {
+        initialize: function ($super, id, animation, speed, options, points) {
             $super(id, animation, speed, options);
             this.isAlive = true;
             this.direction = "down";
+            this.points = points;
         },
-        changeDirection: function () {
+        //AI implemented
+        changeDirection: function (posX, posY) {
+            var diceRoll = (Math.random() * 2) | 0;
+            if (diceRoll == 1) {
+                var diffX = this.options.x - posX;
+                var diffY = this.options.y - posY;
+                console.log(diffY + " " + diffX);
+                if (Math.abs(diffY) > Math.abs(diffX)) {
+                    if (diffY < 0) {
+                        this.direction = "down";
+                    } else {
+                        this.diffY = "up"
+                    }
+                } else {
+                    if (diffX < 0) {
+                        this.direction = "right";
+                    } else {
+                        this.direction = "left";
+                    }
+                }
+                console.log(this.id + " " + " coming " + this.direction);
+                return;
+            }
+
             var randomNumber = (Math.random() * 4) | 0;
             switch (randomNumber) {
                 case 0:
