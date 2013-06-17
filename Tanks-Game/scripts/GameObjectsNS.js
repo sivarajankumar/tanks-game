@@ -123,7 +123,6 @@ var gameObjectsNS = (function () {
             if (diceRoll == 1) {
                 var diffX = this.options.x - posX;
                 var diffY = this.options.y - posY;
-                console.log(diffY + " " + diffX);
                 if (Math.abs(diffY) > Math.abs(diffX)) {
                     if (diffY < 0) {
                         this.direction = "down";
@@ -137,7 +136,6 @@ var gameObjectsNS = (function () {
                         this.direction = "left";
                     }
                 }
-                console.log(this.id + " " + " coming " + this.direction);
                 return;
             }
 
