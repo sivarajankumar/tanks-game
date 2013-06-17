@@ -96,6 +96,18 @@ engine.setAnimation = function (div, animation, loop) {
     }
 }
 
+engine.removeAnimation = function (animDiv) {
+    //console.log(animationToRemove);
+    //console.log(engine.animations)
+    for (var i = 0; i < engine.animations.length; i++) {
+        if (engine.animations[i].div === animDiv) {
+
+            engine.animations.splice(i, 1);
+            break;
+        }
+    };
+}
+
 engine.imagesToPreload = [];
 engine.addImage = function (url) {
     if ($.inArray(url, engine.imagesToPreload) < 0) {
@@ -314,7 +326,7 @@ engine.addCallback = function (callback, rate) {
 
 engine.removeCallback = function (callback) {
     for (var i = 0; i < engine.callbacks.length; i++) {
-        if (engine.callbacks === callback) {
+        if (engine.callbacks[i].callback === callback) {
             engine.callbacks.splice(i, 1);
             break;
         }
